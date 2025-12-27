@@ -23,8 +23,9 @@ const Billing = () => {
     };
 
     const filteredProducts = products.filter(p =>
-        p.name.toLowerCase().includes(search.toLowerCase()) ||
-        (p.barcode && p.barcode.includes(search))
+        (p.name?.toLowerCase() || '').includes(search.toLowerCase()) ||
+        (p.barcode?.toString() || '').includes(search) ||
+        (p.category?.toLowerCase() || '').includes(search.toLowerCase())
     );
 
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -247,64 +248,63 @@ const Billing = () => {
     };
 
     return (
-        <div className="grid grid-cols-12 gap-8 flex-1 min-h-0 animate-in fade-in duration-500 overflow-hidden">
+        <div className="grid grid-cols-12 gap-4 md:gap-8 flex-1 animate-in fade-in duration-500">
             {/* Search & Results */}
-            <div className="col-span-12 lg:col-span-8 flex flex-col gap-6 h-full min-h-0">
-                <div className="glass-card p-6">
-                    <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-[var(--foreground)]">
-                        <Search className="text-primary" size={24} />
+            <div className="col-span-12 lg:col-span-8 flex flex-col gap-4 md:gap-6">
+                <div className="glass-card p-4 md:p-6">
+                    <h2 className="text-lg md:text-xl font-bold mb-4 flex items-center gap-2 text-[var(--foreground)]">
+                        <Search className="text-primary" size={22} md:size={24} />
                         Search Products
                     </h2>
                     <div className="relative">
                         <input
                             type="text"
-                            placeholder="Enter product name or scan barcode..."
-                            className="w-full bg-[var(--input)] border border-[var(--border)] rounded-2xl py-4 pl-6 pr-4 text-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-[var(--muted)] text-[var(--foreground)] font-medium"
+                            placeholder="Search name or barcode..."
+                            className="w-full bg-[var(--input)] border border-[var(--border)] rounded-xl md:rounded-2xl py-3 md:py-4 pl-5 md:pl-6 pr-4 text-base md:text-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-[var(--muted)] text-[var(--foreground)] font-medium"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            autoFocus
                         />
                     </div>
                 </div>
 
-                <div className="bg-[var(--card)] rounded-[24px] border border-[var(--border)] shadow-sm overflow-hidden flex-1 flex flex-col min-h-0 transition-colors duration-300">
-                    <div className="overflow-y-auto custom-scrollbar flex-1">
-                        <table className="w-full text-left border-collapse">
+                <div className="bg-[var(--card)] rounded-[20px] md:rounded-[24px] border border-[var(--border)] shadow-sm overflow-hidden transition-colors duration-300">
+                    <div className="overflow-x-auto custom-scrollbar px-1">
+                        <table className="w-full text-left border-collapse min-w-[500px]">
                             <thead className="sticky top-0 z-10 bg-[var(--input)] shadow-[0_1px_0_0_rgba(0,0,0,0.05)]">
-                                <tr className="text-[var(--muted)] text-[10px] font-black uppercase tracking-widest">
-                                    <th className="px-6 py-4">Product Name</th>
-                                    <th className="px-6 py-4 text-center">Category</th>
-                                    <th className="px-6 py-4 text-center">Stock</th>
-                                    <th className="px-6 py-4 text-right">Price</th>
-                                    <th className="px-6 py-4 text-right">Action</th>
+                                <tr className="text-[var(--muted)] text-[8px] md:text-[10px] font-black uppercase tracking-widest">
+                                    <th className="px-2 md:px-6 py-2 md:py-4">Product Name</th>
+                                    <th className="px-2 md:px-6 py-2 md:py-4 text-center">Category</th>
+                                    <th className="px-2 md:px-6 py-2 md:py-4 text-center">Stock</th>
+                                    <th className="px-2 md:px-6 py-2 md:py-4 text-right">Price</th>
+                                    <th className="px-2 md:px-6 py-2 md:py-4 text-right">Action</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-[var(--border)]">
                                 {currentItems.map(p => (
-                                    <tr key={p._id} className="hover:bg-[var(--input)]/50 transition-all group">
-                                        <td className="px-6 py-3">
-                                            <div className="font-black text-[var(--foreground)] text-sm">{p.name}</div>
-                                            <div className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest mt-0.5">{p.brand || '---'}</div>
+                                    <tr key={p._id} className="bg-[var(--card)] hover:bg-[var(--input)]/50 transition-all group">
+                                        <td className="px-2 md:px-6 py-2.5 md:py-3">
+                                            <div className="font-black text-[var(--foreground)] text-[11px] md:text-sm truncate max-w-[120px] md:max-w-none">{p.name}</div>
+                                            <div className="text-[8px] md:text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest mt-0.5 truncate">{p.brand || '---'}</div>
                                         </td>
-                                        <td className="px-6 py-3 text-center">
-                                            <span className="px-2 py-1 bg-[var(--input)] text-[var(--secondary)] rounded-lg text-[10px] font-black uppercase tracking-widest border border-[var(--border)]">
+                                        <td className="px-2 md:px-6 py-2.5 md:py-3 text-center">
+                                            <span className="px-1.5 py-0.5 md:px-2 md:py-1 bg-[var(--input)] text-[var(--secondary)] rounded-md md:rounded-lg text-[8px] md:text-[10px] font-black uppercase tracking-widest border border-[var(--border)]">
                                                 {p.category}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-3 text-center">
-                                            <div className={`font-black text-sm ${p.stockQuantity < 10 ? 'text-rose-600' : 'text-emerald-600'}`}>
-                                                {p.stockQuantity} <span className="text-[10px] uppercase opacity-50">{p.unit}</span>
+                                        <td className="px-2 md:px-6 py-2.5 md:py-3 text-center">
+                                            <div className={`font-black text-[11px] md:text-sm ${p.stockQuantity < 10 ? 'text-rose-600' : 'text-emerald-600'}`}>
+                                                {p.stockQuantity} <span className="text-[8px] md:text-[10px] uppercase opacity-50">{p.unit}</span>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-3 text-right">
-                                            <div className="font-black text-[var(--foreground)] text-sm">₹{p.sellingPrice}</div>
+                                        <td className="px-2 md:px-6 py-2.5 md:py-3 text-right">
+                                            <div className="font-black text-[var(--foreground)] text-[11px] md:text-sm">₹{p.sellingPrice}</div>
                                         </td>
-                                        <td className="px-6 py-3 text-right">
+                                        <td className="px-2 md:px-6 py-2.5 md:py-3 text-right">
                                             <button
                                                 onClick={() => addToCart(p)}
-                                                className="px-4 py-2 bg-[var(--foreground)] text-[var(--background)] font-black rounded-xl hover:bg-primary transition-all shadow-sm inline-flex items-center gap-2 text-[10px] uppercase tracking-widest active:scale-95"
+                                                className="px-2 py-1.5 md:px-4 md:py-2 bg-[var(--foreground)] text-[var(--background)] font-black rounded-lg md:rounded-xl hover:bg-primary transition-all shadow-sm inline-flex items-center gap-1.5 md:gap-2 text-[8px] md:text-[10px] uppercase tracking-widest active:scale-95 whitespace-nowrap"
                                             >
-                                                <Plus size={14} />
+                                                <Plus size={12} md:size={14} />
                                                 Add
                                             </button>
                                         </td>
@@ -352,7 +352,7 @@ const Billing = () => {
             </div>
 
             {/* Cart & Checkout */}
-            <div className="col-span-12 lg:col-span-4 glass-card p-6 flex flex-col overflow-y-auto">
+            <div className="col-span-12 lg:col-span-4 bg-[var(--card)] border border-[var(--border)] rounded-[20px] md:rounded-[32px] p-4 md:p-6 flex flex-col transition-colors duration-300">
                 <h2 className="text-xl font-bold mb-6 flex items-center gap-2 text-[var(--foreground)]">
                     <ShoppingCart className="text-primary" size={24} />
                     Current Bill

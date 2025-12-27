@@ -134,7 +134,7 @@ const Analytics = () => {
             {/* Daily Report Breakdown */}
             <div className="bg-[var(--card)] rounded-[32px] border-2 border-primary/20 p-8 shadow-sm transition-colors duration-300">
                 <div className="flex items-center justify-between mb-8">
-                    <h3 className="text-lg font-black text-[var(--foreground)] tracking-tight">Day Sales Report ({new Date(data.dayReport.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })})</h3>
+                    <h3 className="text-[14px] font-black text-[var(--foreground)] tracking-tight">Day Sales Report ({new Date(data.dayReport.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })})</h3>
                     <div className="flex gap-4">
                         <div className="text-right">
                             <p className="text-[10px] font-black text-[var(--muted)] uppercase tracking-widest">Day Expenses</p>

@@ -7,10 +7,8 @@ const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
                     <div className="col-span-1 md:col-span-1">
                         <div className="flex items-center gap-2 mb-6">
-                            <div className="p-1.5 bg-primary rounded-lg">
-                                <ShoppingBag className="text-white w-5 h-5" />
-                            </div>
-                            <span className="text-lg font-black tracking-tighter text-[var(--foreground)] uppercase">SuperMarket<span className="text-primary">Pro</span></span>
+
+                            <span className="text-lg font-black tracking-tighter text-[var(--foreground)] uppercase">MS tech<span className="text-primary">Hive</span></span>
                         </div>
                         <p className="text-[var(--muted)] text-sm font-medium leading-relaxed mb-6">Standardizing retail excellence with modern technology and seamless experiences.</p>
                         <div className="flex gap-4">

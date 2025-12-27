@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Search, Bell, User, Sun, Moon } from 'lucide-react';
+import { Search, Bell, User, Sun, Moon, Menu, X } from 'lucide-react';
 import ProfileModal from './ProfileModal';
 
-const Navbar = ({ onToggleTheme, theme }) => {
+const Navbar = ({ onToggleTheme, theme, onToggleSidebar, isSidebarOpen }) => {
     const [showProfileModal, setShowProfileModal] = useState(false);
     const [userInfo, setUserInfo] = useState({});
 
@@ -11,17 +11,27 @@ const Navbar = ({ onToggleTheme, theme }) => {
     }, [showProfileModal]);
 
     return (
-        <header className="h-20 flex items-center justify-between px-8 bg-transparent">
-            <div className="relative w-96">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)] w-4 h-4" />
-                <input
-                    type="text"
-                    placeholder="Search anything..."
-                    className="w-full bg-[var(--input)] border border-[var(--border)] rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-[var(--foreground)] placeholder:text-[var(--muted)]"
-                />
+        <header className="h-20 flex items-center justify-between px-4 md:px-8 bg-transparent transition-all duration-300">
+            <div className="flex items-center gap-4">
+                {/* Mobile Menu Toggle */}
+                <button
+                    onClick={onToggleSidebar}
+                    className="p-2.5 rounded-xl bg-[var(--input)] border border-[var(--border)] text-[var(--secondary)] hover:text-primary hover:border-primary transition-all active:scale-95 lg:hidden"
+                >
+                    {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
+                </button>
+
+                <div className="relative w-48 md:w-96 hidden sm:block">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)] w-4 h-4" />
+                    <input
+                        type="text"
+                        placeholder="Search anything..."
+                        className="w-full bg-[var(--input)] border border-[var(--border)] rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-[var(--foreground)] placeholder:text-[var(--muted)]"
+                    />
+                </div>
             </div>
 
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3 md:gap-6">
                 {/* Theme Toggle */}
                 <button
                     onClick={onToggleTheme}
@@ -33,7 +43,7 @@ const Navbar = ({ onToggleTheme, theme }) => {
 
                 <button
                     onClick={() => setShowProfileModal(true)}
-                    className="flex items-center gap-4 pl-6 border-l border-[var(--border)] hover:bg-[var(--input)] transition-all rounded-l-xl p-2 cursor-pointer"
+                    className="flex items-center gap-3 md:gap-4 pl-3 md:pl-6 border-l border-[var(--border)] hover:bg-[var(--input)] transition-all rounded-r-xl md:rounded-l-xl p-2 cursor-pointer"
                 >
                     <div className="text-right hidden md:block">
                         <p className="text-sm font-bold text-[var(--foreground)] leading-none">{userInfo?.name || 'Admin User'}</p>

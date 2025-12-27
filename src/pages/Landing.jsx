@@ -47,7 +47,7 @@ const Landing = () => {
                         <span className="w-2 h-2 bg-primary rounded-full animate-ping"></span>
                         <span className="text-[10px] font-black uppercase tracking-widest text-[var(--muted)]">Trusted by 500+ Local Businesses</span>
                     </div>
-                    <h1 className="text-7xl md:text-9xl font-black text-[var(--foreground)] tracking-tighter leading-[0.85] mb-8 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+                    <h1 className="text-4xl md:text-7xl font-black text-[var(--foreground)] tracking-tighter leading-[0.85] mb-8 animate-in fade-in slide-in-from-bottom-8 duration-1000">
                         Smart Billing.<br />
                         <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-blue-600 to-indigo-600">Pure Growth.</span>
                     </h1>
@@ -136,7 +136,7 @@ const Landing = () => {
             </section>
 
             {/* Testimonials */}
-            <section className="py-32 px-6 bg-[var(--foreground)] text-[var(--background)] relative overflow-hidden transition-colors duration-300">
+            {/* <section className="py-32 px-6 bg-[var(--foreground)] text-[var(--background)] relative overflow-hidden transition-colors duration-300">
                 <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
                     <div className="absolute top-1/2 left-0 w-96 h-96 bg-primary blur-[100px] rounded-full -translate-x-1/2"></div>
                 </div>
@@ -165,7 +165,7 @@ const Landing = () => {
                         ))}
                     </div>
                 </div>
-            </section>
+            </section> */}
 
             {/* FAQ Section */}
             <section className="py-32 px-6">

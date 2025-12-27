@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Plus, Search, Trash2, Edit3, AlertTriangle, X, Package, Tag, Hash, IndianRupee, Percent, Layers, Calendar, Truck, AlertCircle, Bookmark, Upload, FileText } from 'lucide-react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
+import ConfirmationModal from '../components/ConfirmationModal';
 
 const Products = () => {
     const [products, setProducts] = useState([]);
@@ -13,6 +14,8 @@ const Products = () => {
     const [showCategoryModal, setShowCategoryModal] = useState(false);
     const [newCategory, setNewCategory] = useState('');
     const [editingProduct, setEditingProduct] = useState(null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [productToDelete, setProductToDelete] = useState(null);
     const fileInputRef = useRef(null);
     const [formData, setFormData] = useState({
 
@@ -83,15 +86,22 @@ const Products = () => {
         }
     };
 
-    const handleDelete = async (id) => {
-        if (window.confirm('Are you sure you want to delete this product?')) {
-            try {
-                await api.delete(`/products/${id}`);
-                toast.success('Product deleted successfully');
-                fetchProducts();
-            } catch (error) {
-                toast.error('Failed to delete product');
-            }
+    const handleDeleteClick = (id) => {
+        setProductToDelete(id);
+        setShowDeleteModal(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!productToDelete) return;
+        try {
+            await api.delete(`/products/${productToDelete}`);
+            toast.success('Product deleted successfully');
+            fetchProducts();
+        } catch (error) {
+            toast.error('Failed to delete product');
+        } finally {
+            setShowDeleteModal(false);
+            setProductToDelete(null);
         }
     };
 
@@ -167,13 +177,13 @@ const Products = () => {
 
 
     return (
-        <div className="h-full flex flex-col space-y-6 animate-in slide-in-from-bottom-4 duration-500 overflow-hidden">
-            <div className="flex items-center justify-between">
+        <div className="h-full flex flex-col space-y-4 md:space-y-6 animate-in slide-in-from-bottom-4 duration-500 overflow-hidden">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-3xl font-black text-[var(--foreground)] tracking-tight uppercase">Inventory</h2>
-                    <p className="text-[var(--secondary)] mt-1 font-medium">Manage and monitor your store products.</p>
+                    <h2 className="text-2xl md:text-3xl font-black text-[var(--foreground)] tracking-tight uppercase">Inventory</h2>
+                    <p className="text-[var(--secondary)] mt-1 font-medium text-xs md:text-sm">Manage and monitor your store products.</p>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex flex-wrap gap-2 md:gap-3">
                     <input
                         type="file"
                         ref={fileInputRef}
@@ -183,87 +193,87 @@ const Products = () => {
                     />
                     <button
                         onClick={() => fileInputRef.current?.click()}
-                        className="px-5 py-3 bg-[var(--card)] border border-[var(--border)] text-[var(--secondary)] font-bold rounded-2xl hover:bg-[var(--input)] transition-all flex items-center gap-2 shadow-sm active:scale-95"
+                        className="flex-1 sm:flex-none px-4 md:px-5 py-2.5 md:py-3 bg-[var(--card)] border border-[var(--border)] text-[var(--secondary)] font-bold rounded-xl md:rounded-2xl hover:bg-[var(--input)] transition-all flex items-center justify-center gap-2 shadow-sm active:scale-95 text-xs md:text-sm"
                     >
-                        <Upload size={18} className='rotate-180' />
+                        <Upload size={16} md:size={18} className='rotate-180' />
                         Import CSV
                     </button>
                     <button
                         onClick={() => { setShowModal(true); setEditingProduct(null); resetForm(); }}
-                        className="px-6 py-3 bg-primary text-white font-black rounded-2xl hover:bg-primary/90 transition-all flex items-center gap-2 shadow-xl shadow-primary/30 active:scale-95"
+                        className="flex-1 sm:flex-none px-5 md:px-6 py-2.5 md:py-3 bg-primary text-white font-black rounded-xl md:rounded-2xl hover:bg-primary/90 transition-all flex items-center justify-center gap-2 shadow-xl shadow-primary/30 active:scale-95 text-xs md:text-sm"
                     >
-                        <Plus size={20} />
+                        <Plus size={18} md:size={20} />
                         Add Product
                     </button>
                 </div>
             </div>
 
-            <div className="glass-card p-5 flex items-center gap-4">
-                <Search className="text-[var(--muted)]" size={20} />
+            <div className="glass-card p-3 md:p-5 flex items-center gap-3 md:gap-4">
+                <Search className="text-[var(--muted)]" size={18} md:size={20} />
                 <input
                     type="text"
-                    placeholder="Search by name, category or barcode..."
-                    className="flex-1 bg-transparent border-none focus:ring-0 text-[var(--foreground)] placeholder:text-[var(--muted)] font-bold text-lg"
+                    placeholder="Search inventory..."
+                    className="flex-1 bg-transparent border-none focus:ring-0 text-[var(--foreground)] placeholder:text-[var(--muted)] font-bold text-base md:text-lg"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
             </div>
 
             {/* Products Table */}
-            <div className="bg-[var(--card)] rounded-[32px] border border-[var(--border)] shadow-sm overflow-hidden flex-1 flex flex-col min-h-0 mb-6 transition-colors duration-300">
-                <div className="overflow-y-auto overflow-x-auto flex-1 custom-scrollbar">
-                    <table className="w-full text-left border-collapse">
+            <div className="bg-[var(--card)] rounded-[24px] md:rounded-[32px] border border-[var(--border)] shadow-sm overflow-hidden flex-1 flex flex-col min-h-0 mb-6 transition-colors duration-300">
+                <div className="overflow-x-auto custom-scrollbar flex-1">
+                    <table className="w-full text-left border-collapse min-w-[650px]">
                         <thead className="sticky top-0 z-10 bg-[var(--input)] border-b border-[var(--border)] shadow-sm">
-                            <tr className="text-[var(--muted)] text-[10px] font-black uppercase tracking-[0.2em]">
-                                <th className="px-8 py-5">PRODUCT DETAILS</th>
-                                <th className="px-8 py-5">CATEGORY</th>
-                                <th className="px-8 py-5 text-center">PRICE</th>
-                                <th className="px-8 py-5 text-center">STOCK INFO</th>
-                                <th className="px-8 py-5 text-right">ACTIONS</th>
+                            <tr className="text-[var(--muted)] text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em]">
+                                <th className="px-2 md:px-8 py-1.5 md:py-3 text-[9px] md:text-[10px]">PRODUCT DETAILS</th>
+                                <th className="px-2 md:px-8 py-1.5 md:py-3 text-[9px] md:text-[10px]">CATEGORY</th>
+                                <th className="px-2 md:px-8 py-1.5 md:py-3 text-[9px] md:text-[10px] text-center">PRICE</th>
+                                <th className="px-2 md:px-8 py-1.5 md:py-3 text-[9px] md:text-[10px] text-center">STOCK INFO</th>
+                                <th className="px-2 md:px-8 py-1.5 md:py-3 text-[9px] md:text-[10px] text-right">ACTIONS</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-[var(--border)]">
                             {currentItems.map(product => (
                                 <tr key={product._id} className="bg-[var(--card)] hover:bg-[var(--input)]/50 transition-all">
-                                    <td className="px-8 py-6">
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 rounded-2xl bg-[var(--input)] flex items-center justify-center text-[var(--muted)] shadow-sm border border-[var(--border)]">
-                                                <Package size={20} />
+                                    <td className="px-2 md:px-8 py-2 md:py-4">
+                                        <div className="flex items-center gap-1.5 md:gap-4">
+                                            <div className="w-7 h-7 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-[var(--input)] flex items-center justify-center text-[var(--muted)] shadow-sm border border-[var(--border)] shrink-0">
+                                                <Package size={14} md:size={18} />
                                             </div>
-                                            <div>
-                                                <div className="font-black text-[var(--foreground)] text-base">{product.name}</div>
-                                                <div className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest mt-0.5">{product.brand || '---'}</div>
+                                            <div className="min-w-0">
+                                                <div className="font-black text-[var(--foreground)] text-[11px] md:text-[15px] truncate leading-tight">{product.name}</div>
+                                                <div className="text-[8px] md:text-[9px] font-bold text-[var(--muted)] uppercase tracking-widest mt-0.5 truncate">{product.brand || '---'}</div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="px-8 py-6">
-                                        <span className="px-3 py-1.5 bg-[var(--input)] text-[var(--secondary)] rounded-lg text-[10px] font-black uppercase tracking-widest border border-[var(--border)]">
+                                    <td className="px-2 md:px-8 py-2 md:py-4">
+                                        <span className="px-1.5 py-0.5 md:px-3 md:py-1.5 bg-[var(--input)] text-[var(--secondary)] rounded-md text-[8px] md:text-[10px] font-black uppercase tracking-widest border border-[var(--border)]">
                                             {product.category}
                                         </span>
                                     </td>
-                                    <td className="px-8 py-6 text-center">
-                                        <div className="font-black text-[var(--foreground)] text-lg">₹{product.sellingPrice}</div>
-                                        <div className="text-[9px] font-black text-[var(--muted)] uppercase tracking-tighter">MRP</div>
+                                    <td className="px-2 md:px-8 py-2 md:py-4 text-center">
+                                        <div className="font-black text-[var(--foreground)] text-[13px] md:text-base">₹{product.sellingPrice}</div>
+                                        <div className="text-[7px] md:text-[8px] font-black text-[var(--muted)] uppercase tracking-tighter">MRP</div>
                                     </td>
-                                    <td className="px-8 py-6 text-center">
-                                        <div className={`font-black text-lg ${product.stockQuantity <= (product.minStockLevel || 10) ? 'text-rose-600' : 'text-emerald-600'}`}>
-                                            {product.stockQuantity} <span className="text-[10px] uppercase opacity-50">{product.unit}</span>
+                                    <td className="px-2 md:px-8 py-2 md:py-4 text-center">
+                                        <div className={`font-black text-[13px] md:text-base ${product.stockQuantity <= (product.minStockLevel || 10) ? 'text-rose-600' : 'text-emerald-600'}`}>
+                                            {product.stockQuantity} <span className="text-[8px] md:text-[10px] uppercase opacity-50">{product.unit}</span>
                                         </div>
-                                        <div className="text-[9px] font-black text-[var(--muted)] uppercase tracking-tighter">Current Level</div>
+                                        <div className="text-[7px] md:text-[8px] font-black text-[var(--muted)] uppercase tracking-tighter">Current Level</div>
                                     </td>
-                                    <td className="px-8 py-6">
-                                        <div className="flex items-center justify-end gap-3">
+                                    <td className="px-2 md:px-8 py-2 md:py-4">
+                                        <div className="flex items-center justify-end gap-1.5 md:gap-3">
                                             <button
                                                 onClick={() => { setEditingProduct(product); setFormData(product); setShowModal(true); }}
-                                                className="p-3 bg-blue-500/10 text-blue-500 rounded-xl hover:bg-blue-500/20 active:scale-95 transition-all border border-blue-500/20"
+                                                className="p-1.5 md:p-2.5 bg-blue-500/10 text-blue-500 rounded-lg md:rounded-xl hover:bg-blue-500/20 active:scale-95 transition-all border border-blue-500/20"
                                             >
-                                                <Edit3 size={18} />
+                                                <Edit3 size={14} md:size={16} />
                                             </button>
                                             <button
-                                                onClick={() => handleDelete(product._id)}
-                                                className="p-3 bg-rose-500/10 text-rose-500 rounded-xl hover:bg-rose-500/20 active:scale-95 transition-all border border-rose-500/20"
+                                                onClick={() => handleDeleteClick(product._id)}
+                                                className="p-1.5 md:p-2.5 bg-rose-500/10 text-rose-500 rounded-lg md:rounded-xl hover:bg-rose-500/20 active:scale-95 transition-all border border-rose-500/20"
                                             >
-                                                <Trash2 size={18} />
+                                                <Trash2 size={14} md:size={16} />
                                             </button>
                                         </div>
                                     </td>
@@ -596,6 +606,16 @@ const Products = () => {
                     @apply w-full bg-[var(--input)] border border-[var(--border)] rounded-2xl py-3 px-4 text-[var(--foreground)] focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all font-bold placeholder:text-[var(--muted)] text-sm;
                 }
             ` }} />
+            {/* Delete Confirmation Modal */}
+            <ConfirmationModal
+                isOpen={showDeleteModal}
+                onClose={() => setShowDeleteModal(false)}
+                onConfirm={confirmDelete}
+                title="Delete Product"
+                message="Are you sure you want to delete this product? This action cannot be undone and will remove it from inventory records."
+                confirmText="Delete Product"
+                isDangerous={true}
+            />
         </div>
     );
 };

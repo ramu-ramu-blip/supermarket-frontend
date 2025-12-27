@@ -14,6 +14,7 @@ import Landing from '../pages/Landing';
 const MainLayout = () => {
     const isAuthenticated = !!localStorage.getItem('token');
     const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     useEffect(() => {
         if (theme === 'dark') {
@@ -28,18 +29,22 @@ const MainLayout = () => {
         setTheme(prev => prev === 'light' ? 'dark' : 'light');
     };
 
+    const toggleSidebar = () => {
+        setIsSidebarOpen(prev => !prev);
+    };
+
     if (!isAuthenticated) {
         return <Navigate to="/login" replace />;
     }
 
     return (
-        <div className="flex h-screen overflow-hidden selection:bg-primary/20 selection:text-primary">
-            <Sidebar />
-            <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <div className="flex h-screen overflow-hidden selection:bg-primary/20 selection:text-primary bg-[var(--background)]">
+            <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
+            <div className="flex-1 flex flex-col min-w-0 relative">
                 <div className="sticky top-0 z-30 border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur-md">
-                    <Navbar onToggleTheme={toggleTheme} theme={theme} />
+                    <Navbar onToggleTheme={toggleTheme} theme={theme} onToggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
                 </div>
-                <main className="flex-1 p-8 overflow-hidden flex flex-col min-h-0 bg-[var(--background)]">
+                <main className="flex-1 p-4 md:p-8 overflow-y-auto bg-[var(--background)]">
                     <Outlet />
                 </main>
             </div>
