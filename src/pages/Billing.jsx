@@ -250,8 +250,8 @@ const Billing = () => {
         <div className="grid grid-cols-12 gap-8 flex-1 min-h-0 animate-in fade-in duration-500 overflow-hidden">
             {/* Search & Results */}
             <div className="col-span-12 lg:col-span-8 flex flex-col gap-6 h-full min-h-0">
-                <div className="glass-card p-6 bg-white">
-                    <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-slate-900">
+                <div className="glass-card p-6">
+                    <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-[var(--foreground)]">
                         <Search className="text-primary" size={24} />
                         Search Products
                     </h2>
@@ -259,7 +259,7 @@ const Billing = () => {
                         <input
                             type="text"
                             placeholder="Enter product name or scan barcode..."
-                            className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 pl-6 pr-4 text-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-400 text-slate-900 font-medium"
+                            className="w-full bg-[var(--input)] border border-[var(--border)] rounded-2xl py-4 pl-6 pr-4 text-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-[var(--muted)] text-[var(--foreground)] font-medium"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             autoFocus
@@ -267,27 +267,27 @@ const Billing = () => {
                     </div>
                 </div>
 
-                <div className="bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden flex-1 flex flex-col min-h-0">
+                <div className="bg-[var(--card)] rounded-[24px] border border-[var(--border)] shadow-sm overflow-hidden flex-1 flex flex-col min-h-0 transition-colors duration-300">
                     <div className="overflow-y-auto custom-scrollbar flex-1">
                         <table className="w-full text-left border-collapse">
-                            <thead className="sticky top-0 z-10 bg-slate-50 shadow-[0_1px_0_0_rgba(0,0,0,0.05)]">
-                                <tr className="text-slate-400 text-[10px] font-black uppercase tracking-widest">
-                                    <th className="px-6 py-4 bg-slate-50">Product Name</th>
-                                    <th className="px-6 py-4 text-center bg-slate-50">Category</th>
-                                    <th className="px-6 py-4 text-center bg-slate-50">Stock</th>
-                                    <th className="px-6 py-4 text-right bg-slate-50">Price</th>
-                                    <th className="px-6 py-4 text-right bg-slate-50">Action</th>
+                            <thead className="sticky top-0 z-10 bg-[var(--input)] shadow-[0_1px_0_0_rgba(0,0,0,0.05)]">
+                                <tr className="text-[var(--muted)] text-[10px] font-black uppercase tracking-widest">
+                                    <th className="px-6 py-4">Product Name</th>
+                                    <th className="px-6 py-4 text-center">Category</th>
+                                    <th className="px-6 py-4 text-center">Stock</th>
+                                    <th className="px-6 py-4 text-right">Price</th>
+                                    <th className="px-6 py-4 text-right">Action</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-slate-100">
+                            <tbody className="divide-y divide-[var(--border)]">
                                 {currentItems.map(p => (
-                                    <tr key={p._id} className="hover:bg-slate-50/50 transition-all group">
+                                    <tr key={p._id} className="hover:bg-[var(--input)]/50 transition-all group">
                                         <td className="px-6 py-3">
-                                            <div className="font-black text-slate-900 text-sm">{p.name}</div>
-                                            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{p.brand || '---'}</div>
+                                            <div className="font-black text-[var(--foreground)] text-sm">{p.name}</div>
+                                            <div className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest mt-0.5">{p.brand || '---'}</div>
                                         </td>
                                         <td className="px-6 py-3 text-center">
-                                            <span className="px-2 py-1 bg-slate-100 text-slate-500 rounded-lg text-[10px] font-black uppercase tracking-widest border border-slate-200/50">
+                                            <span className="px-2 py-1 bg-[var(--input)] text-[var(--secondary)] rounded-lg text-[10px] font-black uppercase tracking-widest border border-[var(--border)]">
                                                 {p.category}
                                             </span>
                                         </td>
@@ -297,12 +297,12 @@ const Billing = () => {
                                             </div>
                                         </td>
                                         <td className="px-6 py-3 text-right">
-                                            <div className="font-black text-slate-900 text-sm">₹{p.sellingPrice}</div>
+                                            <div className="font-black text-[var(--foreground)] text-sm">₹{p.sellingPrice}</div>
                                         </td>
                                         <td className="px-6 py-3 text-right">
                                             <button
                                                 onClick={() => addToCart(p)}
-                                                className="px-4 py-2 bg-slate-900 text-white font-black rounded-xl hover:bg-primary transition-all shadow-sm shadow-slate-900/10 inline-flex items-center gap-2 text-[10px] uppercase tracking-widest active:scale-95"
+                                                className="px-4 py-2 bg-[var(--foreground)] text-[var(--background)] font-black rounded-xl hover:bg-primary transition-all shadow-sm inline-flex items-center gap-2 text-[10px] uppercase tracking-widest active:scale-95"
                                             >
                                                 <Plus size={14} />
                                                 Add
@@ -312,7 +312,7 @@ const Billing = () => {
                                 ))}
                                 {filteredProducts.length === 0 && (
                                     <tr>
-                                        <td colSpan="5" className="text-center py-20 text-slate-400 font-black uppercase tracking-widest text-xs opacity-50">
+                                        <td colSpan="5" className="text-center py-20 text-[var(--muted)] font-black uppercase tracking-widest text-xs opacity-50">
                                             No products found matching your search.
                                         </td>
                                     </tr>
@@ -323,25 +323,25 @@ const Billing = () => {
 
                     {/* Pagination Controls */}
                     {filteredProducts.length > itemsPerPage && (
-                        <div className="flex items-center justify-between p-4 bg-slate-50 border-t border-slate-100">
-                            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                        <div className="flex items-center justify-between p-4 bg-[var(--input)] border-t border-[var(--border)]">
+                            <div className="text-xs font-bold text-[var(--muted)] uppercase tracking-wider">
                                 Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredProducts.length)} of {filteredProducts.length}
                             </div>
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={() => paginate(Math.max(1, currentPage - 1))}
                                     disabled={currentPage === 1}
-                                    className="px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-slate-500 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                                    className="px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-[var(--secondary)] bg-[var(--card)] border border-[var(--border)] rounded-lg hover:bg-[var(--input)] disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                                 >
                                     Prev
                                 </button>
-                                <span className="text-xs font-black text-slate-900">
+                                <span className="text-xs font-black text-[var(--foreground)]">
                                     Page {currentPage} of {totalPages}
                                 </span>
                                 <button
                                     onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
                                     disabled={currentPage === totalPages}
-                                    className="px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-slate-500 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                                    className="px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-[var(--secondary)] bg-[var(--card)] border border-[var(--border)] rounded-lg hover:bg-[var(--input)] disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                                 >
                                     Next
                                 </button>
@@ -352,19 +352,19 @@ const Billing = () => {
             </div>
 
             {/* Cart & Checkout */}
-            <div className="col-span-12 lg:col-span-4 glass-card p-6 flex flex-col bg-white overflow-y-auto">
-                <h2 className="text-xl font-bold mb-6 flex items-center gap-2 text-slate-900">
+            <div className="col-span-12 lg:col-span-4 glass-card p-6 flex flex-col overflow-y-auto">
+                <h2 className="text-xl font-bold mb-6 flex items-center gap-2 text-[var(--foreground)]">
                     <ShoppingCart className="text-primary" size={24} />
                     Current Bill
                 </h2>
 
                 <div className="mb-6 space-y-4">
                     <div className="space-y-2">
-                        <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Customer Info</label>
+                        <label className="text-xs font-black text-[var(--muted)] uppercase tracking-widest ml-1">Customer Info</label>
                         <input
                             type="text"
                             placeholder="Name (Optional)"
-                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 text-slate-900 font-medium transition-all"
+                            className="w-full bg-[var(--input)] border border-[var(--border)] rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 text-[var(--foreground)] font-medium transition-all placeholder:text-[var(--muted)]"
                             value={customer}
                             onChange={(e) => setCustomer(e.target.value)}
                         />
@@ -372,25 +372,25 @@ const Billing = () => {
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Payment Mode</label>
+                            <label className="text-xs font-black text-[var(--muted)] uppercase tracking-widest ml-1">Payment Mode</label>
                             <div className="relative">
                                 <select
                                     value={paymentMode}
                                     onChange={(e) => setPaymentMode(e.target.value)}
-                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 text-slate-900 font-bold appearance-none transition-all cursor-pointer"
+                                    className="w-full bg-[var(--input)] border border-[var(--border)] rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 text-[var(--foreground)] font-bold appearance-none transition-all cursor-pointer"
                                 >
                                     <option value="Cash">Cash</option>
                                     <option value="Card">Card</option>
                                     <option value="UPI">UPI</option>
                                 </select>
-                                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={16} />
+                                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--muted)] pointer-events-none" size={16} />
                             </div>
                         </div>
                         <div className="space-y-2">
-                            <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Discount (₹)</label>
+                            <label className="text-xs font-black text-[var(--muted)] uppercase tracking-widest ml-1">Discount (₹)</label>
                             <input
                                 type="number"
-                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 text-slate-900 font-bold transition-all"
+                                className="w-full bg-[var(--input)] border border-[var(--border)] rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 text-[var(--foreground)] font-bold transition-all placeholder:text-[var(--muted)]"
                                 value={discount === 0 ? '' : discount}
                                 placeholder="0"
                                 onChange={(e) => {
@@ -404,27 +404,27 @@ const Billing = () => {
 
                 <div className="flex-1 overflow-y-auto mb-6 pr-2 space-y-4 min-h-[200px]">
                     {cart.map(item => (
-                        <div key={item.productId} className="flex flex-col gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100 relative group transition-all hover:bg-slate-100/50">
+                        <div key={item.productId} className="flex flex-col gap-3 p-4 bg-[var(--input)] rounded-2xl border border-[var(--border)] relative group transition-all hover:bg-[var(--input)]/80">
                             <button
                                 onClick={() => removeFromCart(item.productId)}
-                                className="absolute top-3 right-3 p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                                className="absolute top-3 right-3 p-1.5 text-[var(--muted)] hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
                             >
                                 <Trash2 size={16} />
                             </button>
-                            <span className="font-bold text-slate-800 text-sm pr-8 leading-tight">{item.name}</span>
+                            <span className="font-bold text-[var(--foreground)] text-sm pr-8 leading-tight">{item.name}</span>
                             <div className="flex items-center justify-between mt-2">
-                                <div className="flex items-center gap-2 bg-white rounded-xl border border-slate-200 p-1 shadow-sm">
-                                    <button onClick={() => updateQty(item.productId, -1)} className="p-1.5 hover:bg-slate-50 rounded-lg text-slate-600 transition-all"><Minus size={14} /></button>
-                                    <span className="w-8 text-center text-sm font-bold text-slate-900">{item.quantity}</span>
-                                    <button onClick={() => updateQty(item.productId, 1)} className="p-1.5 hover:bg-slate-50 rounded-lg text-slate-600 transition-all"><Plus size={14} /></button>
+                                <div className="flex items-center gap-2 bg-[var(--card)] rounded-xl border border-[var(--border)] p-1 shadow-sm">
+                                    <button onClick={() => updateQty(item.productId, -1)} className="p-1.5 hover:bg-[var(--input)] rounded-lg text-[var(--secondary)] transition-all"><Minus size={14} /></button>
+                                    <span className="w-8 text-center text-sm font-bold text-[var(--foreground)]">{item.quantity}</span>
+                                    <button onClick={() => updateQty(item.productId, 1)} className="p-1.5 hover:bg-[var(--input)] rounded-lg text-[var(--secondary)] transition-all"><Plus size={14} /></button>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <span className="text-xs font-semibold text-slate-400">@</span>
+                                    <span className="text-xs font-semibold text-[var(--muted)]">@</span>
                                     <input
                                         type="number"
                                         value={item.price}
                                         onChange={(e) => updatePrice(item.productId, e.target.value)}
-                                        className="w-20 bg-white border border-slate-200 rounded-lg py-1 px-2 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 text-right"
+                                        className="w-20 bg-[var(--card)] border border-[var(--border)] rounded-lg py-1 px-2 text-sm font-bold text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-primary/20 text-right"
                                     />
                                     <span className="font-bold text-primary text-base min-w-[60px] text-right">₹{item.total.toFixed(2)}</span>
                                 </div>
@@ -432,28 +432,28 @@ const Billing = () => {
                         </div>
                     ))}
                     {cart.length === 0 && (
-                        <div className="flex flex-col items-center justify-center h-40 text-slate-600">
+                        <div className="flex flex-col items-center justify-center h-40 text-[var(--muted)]">
                             <ShoppingCart size={40} className="mb-2 opacity-20" />
                             <p className="text-xs uppercase tracking-widest font-bold">Cart is empty</p>
                         </div>
                     )}
                 </div>
 
-                <div className="space-y-3 pt-6 border-t border-slate-100 mt-auto">
-                    <div className="flex justify-between text-slate-500 text-sm font-semibold">
+                <div className="space-y-3 pt-6 border-t border-[var(--border)] mt-auto">
+                    <div className="flex justify-between text-[var(--secondary)] text-sm font-semibold">
                         <span>Subtotal</span>
-                        <span className="text-slate-900 font-bold">₹{subTotal.toFixed(2)}</span>
+                        <span className="text-[var(--foreground)] font-bold">₹{subTotal.toFixed(2)}</span>
                     </div>
-                    <div className="flex justify-between text-slate-500 text-sm font-semibold">
+                    <div className="flex justify-between text-[var(--secondary)] text-sm font-semibold">
                         <span>GST Total</span>
-                        <span className="text-slate-900 font-bold">₹{totalGst.toFixed(2)}</span>
+                        <span className="text-[var(--foreground)] font-bold">₹{totalGst.toFixed(2)}</span>
                     </div>
-                    <div className="flex justify-between text-slate-500 text-sm font-semibold">
+                    <div className="flex justify-between text-[var(--secondary)] text-sm font-semibold">
                         <span>Discount</span>
                         <span className="text-rose-600 font-bold">-₹{Number(discount).toFixed(2)}</span>
                     </div>
-                    <div className="flex justify-between pt-4 border-t border-slate-200 mt-2">
-                        <span className="text-xl font-black text-slate-900 uppercase tracking-tighter">Grand Total</span>
+                    <div className="flex justify-between pt-4 border-t border-[var(--border)] mt-2">
+                        <span className="text-xl font-black text-[var(--foreground)] uppercase tracking-tighter">Grand Total</span>
                         <span className="text-2xl font-black text-emerald-600">₹{Math.max(0, finalTotal).toFixed(2)}</span>
                     </div>
 

@@ -30,13 +30,13 @@ const Sidebar = () => {
     };
 
     return (
-        <aside className="w-64 h-screen bg-white border-r border-slate-200 flex flex-col">
+        <aside className="w-64 h-screen bg-[var(--card)] border-r border-[var(--border)] flex flex-col transition-colors duration-300">
             <div className="p-8 flex items-center gap-3">
                 <div className="p-2 bg-primary rounded-xl shadow-md shadow-primary/20">
                     <ShoppingBag className="text-white w-6 h-6" />
                 </div>
-                <h1 className="text-xl font-bold tracking-tight text-slate-900 uppercase">
-                    SuperMarket
+                <h1 className="text-xl font-black tracking-tighter text-[var(--foreground)] uppercase">
+                    Super<span className="text-primary tracking-tighter">Pro</span>
                 </h1>
             </div>
 
@@ -48,26 +48,24 @@ const Sidebar = () => {
                         className={({ isActive }) => `
                             flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
                             ${isActive
-                                ? 'bg-primary text-white shadow-lg shadow-primary/30'
-                                : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'}
+                                ? 'sidebar-link-active'
+                                : 'text-[var(--secondary)] hover:bg-[var(--input)] hover:text-[var(--foreground)]'}
                         `}
                     >
-                        <div className={`
-                            w-6 h-6 flex items-center justify-center transition-all duration-200
-                            ${({ isActive }) => isActive ? 'scale-110' : 'group-hover:scale-110'}
-                        `}>
+                        <div className="w-6 h-6 flex items-center justify-center transition-all duration-200 group-hover:scale-110">
                             <item.icon size={20} strokeWidth={2.5} />
                         </div>
-                        <span className="font-bold text-sm uppercase tracking-wide">{item.name}</span>
+                        <span className="font-bold text-xs uppercase tracking-widest">{item.name}</span>
                     </NavLink>
                 ))}
             </nav>
 
-            <div className="p-4 border-t border-slate-100">
+            <div className="p-4 border-t border-[var(--border)]">
                 <button
                     onClick={() => setShowLogoutModal(true)}
-                    className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-500 transition-all duration-200 font-medium"
+                    className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-[var(--secondary)] hover:bg-rose-500/10 hover:text-rose-500 transition-all duration-200 font-bold uppercase text-xs tracking-widest"
                 >
+                    <LogOut size={20} />
                     <span>Logout</span>
                 </button>
             </div>

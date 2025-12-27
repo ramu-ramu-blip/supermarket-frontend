@@ -170,8 +170,8 @@ const Products = () => {
         <div className="h-full flex flex-col space-y-6 animate-in slide-in-from-bottom-4 duration-500 overflow-hidden">
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-3xl font-black text-slate-900 tracking-tight uppercase">Inventory</h2>
-                    <p className="text-slate-500 mt-1 font-medium">Manage and monitor your store products.</p>
+                    <h2 className="text-3xl font-black text-[var(--foreground)] tracking-tight uppercase">Inventory</h2>
+                    <p className="text-[var(--secondary)] mt-1 font-medium">Manage and monitor your store products.</p>
                 </div>
                 <div className="flex gap-3">
                     <input
@@ -183,7 +183,7 @@ const Products = () => {
                     />
                     <button
                         onClick={() => fileInputRef.current?.click()}
-                        className="px-5 py-3 bg-white border border-slate-200 text-slate-600 font-bold rounded-2xl hover:bg-slate-50 transition-all flex items-center gap-2 shadow-sm active:scale-95"
+                        className="px-5 py-3 bg-[var(--card)] border border-[var(--border)] text-[var(--secondary)] font-bold rounded-2xl hover:bg-[var(--input)] transition-all flex items-center gap-2 shadow-sm active:scale-95"
                     >
                         <Upload size={18} className='rotate-180' />
                         Import CSV
@@ -198,23 +198,23 @@ const Products = () => {
                 </div>
             </div>
 
-            <div className="glass-card p-5 flex items-center gap-4 bg-white shadow-sm border-slate-200">
-                <Search className="text-slate-400" size={20} />
+            <div className="glass-card p-5 flex items-center gap-4">
+                <Search className="text-[var(--muted)]" size={20} />
                 <input
                     type="text"
                     placeholder="Search by name, category or barcode..."
-                    className="flex-1 bg-transparent border-none focus:ring-0 text-slate-900 placeholder:text-slate-400 font-bold text-lg"
+                    className="flex-1 bg-transparent border-none focus:ring-0 text-[var(--foreground)] placeholder:text-[var(--muted)] font-bold text-lg"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
             </div>
 
             {/* Products Table */}
-            <div className="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden flex-1 flex flex-col min-h-0 mb-6">
+            <div className="bg-[var(--card)] rounded-[32px] border border-[var(--border)] shadow-sm overflow-hidden flex-1 flex flex-col min-h-0 mb-6 transition-colors duration-300">
                 <div className="overflow-y-auto overflow-x-auto flex-1 custom-scrollbar">
                     <table className="w-full text-left border-collapse">
-                        <thead className="sticky top-0 z-10 bg-slate-50 border-b border-slate-100 shadow-sm">
-                            <tr className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
+                        <thead className="sticky top-0 z-10 bg-[var(--input)] border-b border-[var(--border)] shadow-sm">
+                            <tr className="text-[var(--muted)] text-[10px] font-black uppercase tracking-[0.2em]">
                                 <th className="px-8 py-5">PRODUCT DETAILS</th>
                                 <th className="px-8 py-5">CATEGORY</th>
                                 <th className="px-8 py-5 text-center">PRICE</th>
@@ -222,46 +222,46 @@ const Products = () => {
                                 <th className="px-8 py-5 text-right">ACTIONS</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100 bg-white">
+                        <tbody className="divide-y divide-[var(--border)]">
                             {currentItems.map(product => (
-                                <tr key={product._id} className="border-b border-slate-50 bg-white">
+                                <tr key={product._id} className="bg-[var(--card)] hover:bg-[var(--input)]/50 transition-all">
                                     <td className="px-8 py-6">
                                         <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 shadow-sm border border-slate-100">
+                                            <div className="w-12 h-12 rounded-2xl bg-[var(--input)] flex items-center justify-center text-[var(--muted)] shadow-sm border border-[var(--border)]">
                                                 <Package size={20} />
                                             </div>
                                             <div>
-                                                <div className="font-black text-slate-900 text-base">{product.name}</div>
-                                                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{product.brand || '---'}</div>
+                                                <div className="font-black text-[var(--foreground)] text-base">{product.name}</div>
+                                                <div className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest mt-0.5">{product.brand || '---'}</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td className="px-8 py-6">
-                                        <span className="px-3 py-1.5 bg-slate-100 text-slate-500 rounded-lg text-[10px] font-black uppercase tracking-widest border border-slate-200/50">
+                                        <span className="px-3 py-1.5 bg-[var(--input)] text-[var(--secondary)] rounded-lg text-[10px] font-black uppercase tracking-widest border border-[var(--border)]">
                                             {product.category}
                                         </span>
                                     </td>
                                     <td className="px-8 py-6 text-center">
-                                        <div className="font-black text-slate-900 text-lg">₹{product.sellingPrice}</div>
-                                        <div className="text-[9px] font-black text-slate-300 uppercase tracking-tighter">MRP</div>
+                                        <div className="font-black text-[var(--foreground)] text-lg">₹{product.sellingPrice}</div>
+                                        <div className="text-[9px] font-black text-[var(--muted)] uppercase tracking-tighter">MRP</div>
                                     </td>
                                     <td className="px-8 py-6 text-center">
                                         <div className={`font-black text-lg ${product.stockQuantity <= (product.minStockLevel || 10) ? 'text-rose-600' : 'text-emerald-600'}`}>
                                             {product.stockQuantity} <span className="text-[10px] uppercase opacity-50">{product.unit}</span>
                                         </div>
-                                        <div className="text-[9px] font-black text-slate-300 uppercase tracking-tighter">Current Level</div>
+                                        <div className="text-[9px] font-black text-[var(--muted)] uppercase tracking-tighter">Current Level</div>
                                     </td>
                                     <td className="px-8 py-6">
                                         <div className="flex items-center justify-end gap-3">
                                             <button
                                                 onClick={() => { setEditingProduct(product); setFormData(product); setShowModal(true); }}
-                                                className="p-3 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 active:scale-95 transition-all shadow-sm border border-blue-100"
+                                                className="p-3 bg-blue-500/10 text-blue-500 rounded-xl hover:bg-blue-500/20 active:scale-95 transition-all border border-blue-500/20"
                                             >
                                                 <Edit3 size={18} />
                                             </button>
                                             <button
                                                 onClick={() => handleDelete(product._id)}
-                                                className="p-3 bg-rose-50 text-rose-600 rounded-xl hover:bg-rose-100 active:scale-95 transition-all shadow-sm border border-rose-100"
+                                                className="p-3 bg-rose-500/10 text-rose-500 rounded-xl hover:bg-rose-500/20 active:scale-95 transition-all border border-rose-500/20"
                                             >
                                                 <Trash2 size={18} />
                                             </button>
@@ -276,25 +276,25 @@ const Products = () => {
 
             {filteredProducts.length === 0 && (
                 <div className="text-center py-40">
-                    <div className="inline-flex p-10 bg-slate-50 rounded-[40px] border border-slate-100 mb-6 text-slate-300">
+                    <div className="inline-flex p-10 bg-[var(--input)] rounded-[40px] border border-[var(--border)] mb-6 text-[var(--muted)]">
                         <Package size={80} strokeWidth={1} />
                     </div>
-                    <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Vault is Empty</h3>
-                    <p className="text-slate-400 font-bold mt-2 uppercase text-[10px] tracking-widest">Add your first product to see it here</p>
+                    <h3 className="text-2xl font-black text-[var(--foreground)] uppercase tracking-tight">Vault is Empty</h3>
+                    <p className="text-[var(--muted)] font-bold mt-2 uppercase text-[10px] tracking-widest">Add your first product to see it here</p>
                 </div>
             )}
 
             {/* Pagination Controls */}
             {filteredProducts.length > itemsPerPage && (
-                <div className="flex items-center justify-between p-4 bg-white rounded-[20px] border border-slate-100 shadow-sm">
-                    <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                <div className="flex items-center justify-between p-4 bg-[var(--card)] rounded-[20px] border border-[var(--border)] shadow-sm">
+                    <div className="text-xs font-bold text-[var(--muted)] uppercase tracking-wider">
                         Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredProducts.length)} of {filteredProducts.length}
                     </div>
                     <div className="flex items-center gap-2">
                         <button
                             onClick={() => paginate(Math.max(1, currentPage - 1))}
                             disabled={currentPage === 1}
-                            className="px-4 py-2 text-xs font-black uppercase tracking-widest text-slate-500 bg-slate-50 rounded-xl hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                            className="px-4 py-2 text-xs font-black uppercase tracking-widest text-[var(--secondary)] bg-[var(--input)] rounded-xl hover:bg-[var(--background)] disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                         >
                             Prev
                         </button>
@@ -303,8 +303,8 @@ const Products = () => {
                                 key={i}
                                 onClick={() => paginate(i + 1)}
                                 className={`w-8 h-8 flex items-center justify-center rounded-xl text-xs font-black transition-all ${currentPage === i + 1
-                                    ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20 scale-110'
-                                    : 'bg-slate-50 text-slate-500 hover:bg-slate-100'
+                                    ? 'bg-[var(--foreground)] text-[var(--background)] shadow-lg scale-110'
+                                    : 'bg-[var(--input)] text-[var(--secondary)] hover:bg-[var(--background)]'
                                     }`}
                             >
                                 {i + 1}
@@ -313,7 +313,7 @@ const Products = () => {
                         <button
                             onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
                             disabled={currentPage === totalPages}
-                            className="px-4 py-2 text-xs font-black uppercase tracking-widest text-slate-500 bg-slate-50 rounded-xl hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                            className="px-4 py-2 text-xs font-black uppercase tracking-widest text-[var(--secondary)] bg-[var(--input)] rounded-xl hover:bg-[var(--background)] disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                         >
                             Next
                         </button>
@@ -323,299 +323,218 @@ const Products = () => {
 
             {/* Product Modal */}
             {showModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300">
-                    <div className="bg-white w-full max-w-5xl rounded-[40px] shadow-2xl overflow-hidden flex flex-col max-h-[95vh] animate-in zoom-in-95 duration-300 border border-slate-100">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-300">
+                    <div className="bg-[var(--card)] w-full max-w-5xl rounded-[40px] shadow-2xl overflow-hidden flex flex-col max-h-[95vh] animate-in zoom-in-95 duration-300 border border-[var(--border)] transition-colors duration-300">
                         {/* Modal Header */}
-                        <div className="px-10 py-6 border-b border-slate-100 flex items-center justify-between bg-white z-10">
+                        <div className="px-10 py-6 border-b border-[var(--border)] flex items-center justify-between bg-[var(--card)] z-10">
                             <div>
-                                <h3 className="text-2xl font-black text-slate-900 tracking-tight uppercase">
+                                <h3 className="text-2xl font-black text-[var(--foreground)] tracking-tight uppercase">
                                     {editingProduct ? 'Update Product' : 'Add New Product'}
                                 </h3>
-                                <p className="text-slate-400 text-[11px] font-bold uppercase tracking-widest mt-1">
+                                <p className="text-[var(--muted)] text-[11px] font-bold uppercase tracking-widest mt-1">
                                     {editingProduct ? 'Edit existing product details' : 'Enter details for the new product'}
                                 </p>
                             </div>
-                            <button onClick={() => setShowModal(false)} className="p-2.5 hover:bg-slate-50 rounded-full transition-all text-slate-400 hover:text-rose-500 active:scale-95">
+                            <button onClick={() => setShowModal(false)} className="p-2.5 hover:bg-[var(--input)] rounded-full transition-all text-[var(--muted)] hover:text-rose-500 active:scale-95">
                                 <X size={24} />
                             </button>
                         </div>
 
-                        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto bg-slate-50/50">
-                            <div className="p-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
-                                {/* Left Column */}
+                        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto bg-[var(--background)]/50 custom-scrollbar">
+                            <div className="p-10 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+                                {/* Left Column: Basic & Classification */}
                                 <div className="space-y-8">
-                                    {/* Basic Information Section */}
-                                    <div className="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm transition-all hover:shadow-md">
-                                        <div className="flex items-center gap-4 mb-8">
-                                            <div className="w-10 h-10 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600">
-                                                <Package size={20} strokeWidth={2.5} />
+                                    <div className="space-y-6">
+                                        <div className="space-y-2.5">
+                                            <label className="text-[11px] font-black text-[var(--muted)] uppercase tracking-widest ml-1">Product Name <span className="text-rose-500">*</span></label>
+                                            <input
+                                                required
+                                                name="name"
+                                                value={formData.name}
+                                                onChange={handleInputChange}
+                                                className="w-full bg-[var(--input)] border border-slate-200 dark:border-slate-700 rounded-2xl py-4 px-6 text-[var(--foreground)] font-bold focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-[var(--muted)] text-sm"
+                                                placeholder="e.g. Amul Milk"
+                                            />
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-6">
+                                            <div className="space-y-2.5">
+                                                <label className="text-[11px] font-black text-[var(--muted)] uppercase tracking-widest ml-1">Brand</label>
+                                                <input
+                                                    name="brand"
+                                                    value={formData.brand}
+                                                    onChange={handleInputChange}
+                                                    className="w-full bg-[var(--input)] border border-slate-200 dark:border-slate-700 rounded-2xl py-4 px-6 text-[var(--foreground)] font-bold focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-[var(--muted)] text-sm"
+                                                    placeholder="e.g. Amul"
+                                                />
                                             </div>
-                                            <div>
-                                                <h4 className="text-sm font-black text-slate-900 uppercase tracking-widest">Basic Information</h4>
-                                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">Product Identification</p>
+                                            <div className="space-y-2.5">
+                                                <label className="text-[11px] font-black text-[var(--muted)] uppercase tracking-widest ml-1">Barcode</label>
+                                                <input
+                                                    name="barcode"
+                                                    value={formData.barcode}
+                                                    onChange={handleInputChange}
+                                                    className="w-full bg-[var(--input)] border border-slate-200 dark:border-slate-700 rounded-2xl py-4 px-6 text-[var(--foreground)] font-bold focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-[var(--muted)] text-sm"
+                                                    placeholder="Scan Barcode"
+                                                />
                                             </div>
                                         </div>
 
-                                        <div className="grid grid-cols-1 gap-6">
-                                            <div className="space-y-3">
-                                                <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Product Name <span className="text-rose-500">*</span></label>
-                                                <div className="relative group">
-                                                    <Package className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-500 transition-colors" size={18} />
-                                                    <input
-                                                        required
-                                                        name="name"
-                                                        value={formData.name}
-                                                        onChange={handleInputChange}
-                                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3.5 pl-12 pr-4 text-slate-900 font-bold focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-300 text-sm"
-                                                        placeholder="e.g. Amul Milk"
-                                                    />
-                                                </div>
+                                        <div className="space-y-2.5">
+                                            <div className="flex items-center justify-between">
+                                                <label className="text-[11px] font-black text-[var(--muted)] uppercase tracking-widest ml-1">Category <span className="text-rose-500">*</span></label>
+                                                <button type="button" onClick={() => setShowCategoryModal(true)} className="text-[9px] font-black text-primary uppercase tracking-widest hover:text-primary transition-colors bg-primary/10 px-2.5 py-1 rounded-lg">
+                                                    + NEW
+                                                </button>
                                             </div>
-                                            <div className="grid grid-cols-2 gap-6">
-                                                <div className="space-y-3">
-                                                    <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Brand</label>
-                                                    <div className="relative group">
-                                                        <Bookmark className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-500 transition-colors" size={18} />
-                                                        <input
-                                                            name="brand"
-                                                            value={formData.brand}
-                                                            onChange={handleInputChange}
-                                                            className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3.5 pl-12 pr-4 text-slate-900 font-bold focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-300 text-sm"
-                                                            placeholder="e.g. Amul"
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="space-y-3">
-                                                    <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Barcode</label>
-                                                    <div className="relative group">
-                                                        <Hash className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-500 transition-colors" size={18} />
-                                                        <input
-                                                            name="barcode"
-                                                            value={formData.barcode}
-                                                            onChange={handleInputChange}
-                                                            className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3.5 pl-12 pr-4 text-slate-900 font-bold focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-300 text-sm"
-                                                            placeholder="Scan Barcode"
-                                                        />
-                                                    </div>
+                                            <div className="relative group">
+                                                <select
+                                                    required
+                                                    name="category"
+                                                    value={formData.category}
+                                                    onChange={handleInputChange}
+                                                    className="w-full bg-[var(--input)] border border-slate-200 dark:border-slate-700 rounded-2xl py-4 px-6 text-[var(--foreground)] font-bold focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all appearance-none cursor-pointer text-sm"
+                                                >
+                                                    <option value="">Select Category</option>
+                                                    {categories.map(c => <option key={c._id} value={c.name}>{c.name}</option>)}
+                                                </select>
+                                                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--muted)]">
+                                                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                    </svg>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    {/* Classification Section */}
-                                    <div className="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm transition-all hover:shadow-md">
-                                        <div className="flex items-center gap-4 mb-8">
-                                            <div className="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600">
-                                                <Layers size={20} strokeWidth={2.5} />
+                                        <div className="grid grid-cols-2 gap-6">
+                                            <div className="space-y-2.5">
+                                                <label className="text-[11px] font-black text-[var(--muted)] uppercase tracking-widest ml-1">Unit</label>
+                                                <input
+                                                    name="unit"
+                                                    value={formData.unit}
+                                                    onChange={handleInputChange}
+                                                    className="w-full bg-[var(--input)] border border-slate-200 dark:border-slate-700 rounded-2xl py-4 px-6 text-[var(--foreground)] font-bold focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-[var(--muted)] text-sm"
+                                                    placeholder="Packet"
+                                                />
                                             </div>
-                                            <div>
-                                                <h4 className="text-sm font-black text-slate-900 uppercase tracking-widest">Classification</h4>
-                                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">Category & Organization</p>
-                                            </div>
-                                        </div>
-
-                                        <div className="grid grid-cols-1 gap-6">
-                                            <div className="space-y-3">
-                                                <div className="flex items-center justify-between">
-                                                    <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Category <span className="text-rose-500">*</span></label>
-                                                    <button type="button" onClick={() => setShowCategoryModal(true)} className="text-[9px] font-black text-indigo-500 uppercase tracking-widest hover:text-indigo-600 transition-colors bg-indigo-50 px-2 py-1 rounded-lg">
-                                                        + NEW
-                                                    </button>
-                                                </div>
-                                                <div className="relative group">
-                                                    <Tag className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-500 transition-colors" size={18} />
-                                                    <select
-                                                        required
-                                                        name="category"
-                                                        value={formData.category}
-                                                        onChange={handleInputChange}
-                                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3.5 pl-12 pr-4 text-slate-900 font-bold focus:outline-none focus:border-indigo-500/50 focus:ring-4 focus:ring-indigo-500/10 transition-all appearance-none cursor-pointer text-sm"
-                                                    >
-                                                        <option value="">Select Category</option>
-                                                        {categories.map(c => <option key={c._id} value={c.name}>{c.name}</option>)}
-                                                    </select>
-                                                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
-                                                        <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                                        </svg>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="grid grid-cols-2 gap-6">
-                                                <div className="space-y-3">
-                                                    <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Unit</label>
-                                                    <div className="relative group">
-                                                        <Layers className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-500 transition-colors" size={18} />
-                                                        <input
-                                                            name="unit"
-                                                            value={formData.unit}
-                                                            onChange={handleInputChange}
-                                                            className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3.5 pl-12 pr-4 text-slate-900 font-bold focus:outline-none focus:border-indigo-500/50 focus:ring-4 focus:ring-indigo-500/10 transition-all placeholder:text-slate-300 text-sm"
-                                                            placeholder="Packet"
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="space-y-3">
-                                                    <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Supplier</label>
-                                                    <div className="relative group">
-                                                        <Truck className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-500 transition-colors" size={18} />
-                                                        <input
-                                                            name="supplier"
-                                                            value={formData.supplier}
-                                                            onChange={handleInputChange}
-                                                            className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3.5 pl-12 pr-4 text-slate-900 font-bold focus:outline-none focus:border-indigo-500/50 focus:ring-4 focus:ring-indigo-500/10 transition-all placeholder:text-slate-300 text-sm"
-                                                            placeholder="e.g. Amul Distributor"
-                                                        />
-                                                    </div>
-                                                </div>
+                                            <div className="space-y-2.5">
+                                                <label className="text-[11px] font-black text-[var(--muted)] uppercase tracking-widest ml-1">Supplier</label>
+                                                <input
+                                                    name="supplier"
+                                                    value={formData.supplier}
+                                                    onChange={handleInputChange}
+                                                    className="w-full bg-[var(--input)] border border-slate-200 dark:border-slate-700 rounded-2xl py-4 px-6 text-[var(--foreground)] font-bold focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-[var(--muted)] text-sm"
+                                                    placeholder="e.g. Amul Distributor"
+                                                />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Right Column */}
+                                {/* Right Column: Pricing & Inventory */}
                                 <div className="space-y-8">
-                                    {/* Pricing & Taxation Section */}
-                                    <div className="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm transition-all hover:shadow-md">
-                                        <div className="flex items-center gap-4 mb-8">
-                                            <div className="w-10 h-10 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600">
-                                                <IndianRupee size={20} strokeWidth={2.5} />
+                                    <div className="space-y-6">
+                                        <div className="grid grid-cols-2 gap-6">
+                                            <div className="space-y-2.5">
+                                                <label className="text-[11px] font-black text-[var(--muted)] uppercase tracking-widest ml-1">Cost Price <span className="text-rose-500">*</span></label>
+                                                <input
+                                                    required
+                                                    type="number"
+                                                    name="costPrice"
+                                                    value={formData.costPrice}
+                                                    onChange={handleInputChange}
+                                                    className="w-full bg-[var(--input)] border border-slate-200 dark:border-slate-700 rounded-2xl py-4 px-6 text-[var(--foreground)] font-bold focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-[var(--muted)] text-sm"
+                                                    placeholder="0.00"
+                                                />
                                             </div>
-                                            <div>
-                                                <h4 className="text-sm font-black text-slate-900 uppercase tracking-widest">Pricing & Taxation</h4>
-                                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">Financial Details</p>
+                                            <div className="space-y-2.5">
+                                                <label className="text-[11px] font-black text-[var(--muted)] uppercase tracking-widest ml-1">Selling Price <span className="text-rose-500">*</span></label>
+                                                <input
+                                                    required
+                                                    type="number"
+                                                    name="sellingPrice"
+                                                    value={formData.sellingPrice}
+                                                    onChange={handleInputChange}
+                                                    className="w-full bg-[var(--input)] border border-slate-200 dark:border-slate-700 rounded-2xl py-4 px-6 text-[var(--foreground)] font-bold focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-[var(--muted)] text-sm"
+                                                    placeholder="0.00"
+                                                />
                                             </div>
                                         </div>
 
                                         <div className="grid grid-cols-2 gap-6">
-                                            <div className="space-y-3">
-                                                <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Cost Price <span className="text-rose-500">*</span></label>
-                                                <div className="relative group">
-                                                    <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-emerald-500 transition-colors" size={18} />
-                                                    <input
-                                                        required
-                                                        type="number"
-                                                        name="costPrice"
-                                                        value={formData.costPrice}
-                                                        onChange={handleInputChange}
-                                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3.5 pl-12 pr-4 text-slate-900 font-bold focus:outline-none focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:text-slate-300 text-sm"
-                                                        placeholder="0.00"
-                                                    />
-                                                </div>
+                                            <div className="space-y-2.5">
+                                                <label className="text-[11px] font-black text-[var(--muted)] uppercase tracking-widest ml-1">GST %</label>
+                                                <input
+                                                    type="number"
+                                                    name="gstPercent"
+                                                    value={formData.gstPercent}
+                                                    onChange={handleInputChange}
+                                                    className="w-full bg-[var(--input)] border border-slate-200 dark:border-slate-700 rounded-2xl py-4 px-6 text-[var(--foreground)] font-bold focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-[var(--muted)] text-sm"
+                                                    placeholder="0"
+                                                />
                                             </div>
-                                            <div className="space-y-3">
-                                                <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Selling Price <span className="text-rose-500">*</span></label>
-                                                <div className="relative group">
-                                                    <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-emerald-500 transition-colors" size={18} />
-                                                    <input
-                                                        required
-                                                        type="number"
-                                                        name="sellingPrice"
-                                                        value={formData.sellingPrice}
-                                                        onChange={handleInputChange}
-                                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3.5 pl-12 pr-4 text-slate-900 font-bold focus:outline-none focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:text-slate-300 text-sm"
-                                                        placeholder="0.00"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="space-y-3">
-                                                <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">GST %</label>
-                                                <div className="relative group">
-                                                    <Percent className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-emerald-500 transition-colors" size={18} />
-                                                    <input
-                                                        type="number"
-                                                        name="gstPercent"
-                                                        value={formData.gstPercent}
-                                                        onChange={handleInputChange}
-                                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3.5 pl-12 pr-4 text-slate-900 font-bold focus:outline-none focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:text-slate-300 text-sm"
-                                                        placeholder="0"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="space-y-3">
-                                                <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">GST Type</label>
+                                            <div className="space-y-2.5">
+                                                <label className="text-[11px] font-black text-[var(--muted)] uppercase tracking-widest ml-1">GST Type</label>
                                                 <div
-                                                    className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3 px-4 flex items-center justify-between cursor-pointer group hover:border-emerald-500/50 transition-all"
+                                                    className="w-full bg-[var(--input)] border border-slate-200 dark:border-slate-700 rounded-2xl py-3.5 px-6 flex items-center justify-between cursor-pointer group hover:border-primary/50 transition-all"
                                                     onClick={() => setFormData(prev => ({ ...prev, gstType: prev.gstType === 'Inclusive' ? 'Exclusive' : 'Inclusive' }))}
                                                 >
-                                                    <span className={`text-sm font-bold transition-colors ${formData.gstType === 'Inclusive' ? 'text-emerald-600' : 'text-slate-400'}`}>Inclusive</span>
-                                                    <div className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${formData.gstType === 'Inclusive' ? 'bg-emerald-500' : 'bg-slate-300'}`}>
-                                                        <div className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-300 ${formData.gstType === 'Inclusive' ? 'translate-x-6' : 'translate-x-0'}`}></div>
+                                                    <span className={`text-[11px] font-black transition-colors uppercase ${formData.gstType === 'Inclusive' ? 'text-primary' : 'text-[var(--muted)]'}`}>Inc</span>
+                                                    <div className={`relative w-10 h-5 rounded-full transition-colors duration-300 ${formData.gstType === 'Inclusive' ? 'bg-primary' : 'bg-[var(--border)]'}`}>
+                                                        <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-300 ${formData.gstType === 'Inclusive' ? 'translate-x-5' : 'translate-x-0'}`}></div>
                                                     </div>
-                                                    <span className={`text-sm font-bold transition-colors ${formData.gstType === 'Exclusive' ? 'text-emerald-600' : 'text-slate-400'}`}>Exclusive</span>
+                                                    <span className={`text-[11px] font-black transition-colors uppercase ${formData.gstType === 'Exclusive' ? 'text-primary' : 'text-[var(--muted)]'}`}>Exc</span>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Inventory & Batch Section */}
-                                    <div className="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm transition-all hover:shadow-md">
-                                        <div className="flex items-center gap-4 mb-8">
-                                            <div className="w-10 h-10 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-600">
-                                                <Calendar size={20} strokeWidth={2.5} />
-                                            </div>
-                                            <div>
-                                                <h4 className="text-sm font-black text-slate-900 uppercase tracking-widest">Inventory & Batch</h4>
-                                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">Stock Management</p>
                                             </div>
                                         </div>
 
                                         <div className="grid grid-cols-2 gap-6">
-                                            <div className="space-y-3">
-                                                <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Current Stock <span className="text-rose-500">*</span></label>
-                                                <div className="relative group">
-                                                    <Package className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-amber-500 transition-colors" size={18} />
-                                                    <input
-                                                        required
-                                                        type="number"
-                                                        name="stockQuantity"
-                                                        value={formData.stockQuantity}
-                                                        onChange={handleInputChange}
-                                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3.5 pl-12 pr-4 text-slate-900 font-bold focus:outline-none focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10 transition-all placeholder:text-slate-300 text-sm"
-                                                        placeholder="100"
-                                                    />
-                                                </div>
+                                            <div className="space-y-2.5">
+                                                <label className="text-[11px] font-black text-[var(--muted)] uppercase tracking-widest ml-1">Current Stock <span className="text-rose-500">*</span></label>
+                                                <input
+                                                    required
+                                                    type="number"
+                                                    name="stockQuantity"
+                                                    value={formData.stockQuantity}
+                                                    onChange={handleInputChange}
+                                                    className="w-full bg-[var(--input)] border border-slate-200 dark:border-slate-700 rounded-2xl py-4 px-6 text-[var(--foreground)] font-bold focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-[var(--muted)] text-sm"
+                                                    placeholder="100"
+                                                />
                                             </div>
-                                            <div className="space-y-3">
-                                                <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Min Stock Level</label>
-                                                <div className="relative group">
-                                                    <AlertCircle className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-amber-500 transition-colors" size={18} />
-                                                    <input
-                                                        type="number"
-                                                        name="minStockLevel"
-                                                        value={formData.minStockLevel}
-                                                        onChange={handleInputChange}
-                                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3.5 pl-12 pr-4 text-slate-900 font-bold focus:outline-none focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10 transition-all placeholder:text-slate-300 text-sm"
-                                                        placeholder="10"
-                                                    />
-                                                </div>
+                                            <div className="space-y-2.5">
+                                                <label className="text-[11px] font-black text-[var(--muted)] uppercase tracking-widest ml-1">Min Level</label>
+                                                <input
+                                                    type="number"
+                                                    name="minStockLevel"
+                                                    value={formData.minStockLevel}
+                                                    onChange={handleInputChange}
+                                                    className="w-full bg-[var(--input)] border border-slate-200 dark:border-slate-700 rounded-2xl py-4 px-6 text-[var(--foreground)] font-bold focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-[var(--muted)] text-sm"
+                                                    placeholder="10"
+                                                />
                                             </div>
-                                            <div className="space-y-3">
-                                                <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Expiry Date <span className="text-rose-500">*</span></label>
-                                                <div className="relative group">
-                                                    <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-amber-500 transition-colors" size={18} />
-                                                    <input
-                                                        required
-                                                        type="date"
-                                                        name="expiryDate"
-                                                        value={formData.expiryDate ? formData.expiryDate.split('T')[0] : ''}
-                                                        onChange={handleInputChange}
-                                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3.5 pl-12 pr-4 text-slate-900 font-bold focus:outline-none focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10 transition-all text-sm uppercase"
-                                                    />
-                                                </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-6">
+                                            <div className="space-y-2.5">
+                                                <label className="text-[11px] font-black text-[var(--muted)] uppercase tracking-widest ml-1">Expiry Date <span className="text-rose-500">*</span></label>
+                                                <input
+                                                    required
+                                                    type="date"
+                                                    name="expiryDate"
+                                                    value={formData.expiryDate ? formData.expiryDate.split('T')[0] : ''}
+                                                    onChange={handleInputChange}
+                                                    className="w-full bg-[var(--input)] border border-slate-200 dark:border-slate-700 rounded-2xl py-4 px-6 text-[var(--foreground)] font-bold focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all text-sm uppercase"
+                                                />
                                             </div>
-                                            <div className="space-y-3">
-                                                <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Batch Number</label>
-                                                <div className="relative group">
-                                                    <Hash className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-amber-500 transition-colors" size={18} />
-                                                    <input
-                                                        name="batchNo"
-                                                        value={formData.batchNo}
-                                                        onChange={handleInputChange}
-                                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3.5 pl-12 pr-4 text-slate-900 font-bold focus:outline-none focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/10 transition-all placeholder:text-slate-300 text-sm uppercase"
-                                                        placeholder="e.g. BATCH-001"
-                                                    />
-                                                </div>
+                                            <div className="space-y-2.5">
+                                                <label className="text-[11px] font-black text-[var(--muted)] uppercase tracking-widest ml-1">Batch No.</label>
+                                                <input
+                                                    name="batchNo"
+                                                    value={formData.batchNo}
+                                                    onChange={handleInputChange}
+                                                    className="w-full bg-[var(--input)] border border-slate-200 dark:border-slate-700 rounded-2xl py-4 px-6 text-[var(--foreground)] font-bold focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-[var(--muted)] text-sm uppercase"
+                                                    placeholder="BATCH-001"
+                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -623,11 +542,11 @@ const Products = () => {
                             </div>
 
                             {/* Footer Buttons */}
-                            <div className="p-8 border-t border-slate-100 bg-white flex gap-6 sticky bottom-0 z-10">
-                                <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-5 bg-slate-50 text-slate-500 font-black rounded-3xl hover:bg-slate-100 transition-all uppercase tracking-[0.2em] text-xs active:scale-95 shadow-sm border border-slate-100">
+                            <div className="px-10 py-8 border-t border-[var(--border)] bg-[var(--card)] flex gap-6 sticky bottom-0 z-10 transition-colors duration-300">
+                                <button type="button" onClick={() => setShowModal(false)} className="px-10 py-4 bg-[var(--input)] text-[var(--muted)] font-black rounded-2xl hover:bg-[var(--background)] transition-all uppercase tracking-widest text-xs active:scale-95 border border-[var(--border)]">
                                     Cancel
                                 </button>
-                                <button type="submit" className="flex-[2] py-5 bg-primary text-white font-bold rounded-3xl hover:bg-primary/90 transition-all uppercase tracking-[0.2em] text-sm shadow-xl shadow-primary/20 active:scale-[0.98] animate-in slide-in-from-bottom-4 duration-500">
+                                <button type="submit" className="flex-1 py-4 bg-primary text-white font-black rounded-2xl hover:bg-primary/90 transition-all uppercase tracking-widest text-sm shadow-xl shadow-primary/20 active:scale-[0.98]">
                                     {editingProduct ? 'Update Product' : 'Create Product'}
                                 </button>
                             </div>
@@ -638,21 +557,21 @@ const Products = () => {
 
             {/* Category Modal */}
             {showCategoryModal && (
-                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
-                    <div className="bg-white w-full max-w-sm rounded-[32px] shadow-2xl p-8 animate-in zoom-in-95 duration-300">
+                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
+                    <div className="bg-[var(--card)] w-full max-w-sm rounded-[32px] shadow-2xl p-8 animate-in zoom-in-95 duration-300 border border-[var(--border)]">
                         <div className="flex items-center justify-between mb-8">
-                            <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Add Category</h3>
-                            <button onClick={() => setShowCategoryModal(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
+                            <h3 className="text-xl font-black text-[var(--foreground)] uppercase tracking-tight">Add Category</h3>
+                            <button onClick={() => setShowCategoryModal(false)} className="text-[var(--muted)] hover:text-[var(--foreground)] transition-colors">
                                 <X size={20} />
                             </button>
                         </div>
                         <div className="space-y-6">
                             <div className="space-y-2">
-                                <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Category Name</label>
+                                <label className="text-xs font-black text-[var(--muted)] uppercase tracking-widest ml-1">Category Name</label>
                                 <input
                                     value={newCategory}
                                     onChange={(e) => setNewCategory(e.target.value)}
-                                    className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 px-6 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                                    className="w-full bg-[var(--input)] border border-slate-200 dark:border-slate-700 rounded-2xl py-4 px-6 text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-bold placeholder:text-[var(--muted)]"
                                     placeholder="e.g. Beverages"
                                     autoFocus
                                 />
@@ -671,10 +590,10 @@ const Products = () => {
             <style dangerouslySetInnerHTML={{
                 __html: `
                 .input-field-new {
-                    @apply w-full bg-slate-50/50 border border-slate-200 rounded-2xl py-4 px-6 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-bold placeholder:text-slate-300 text-sm;
+                    @apply w-full bg-[var(--input)] border border-[var(--border)] rounded-2xl py-4 px-6 text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-bold placeholder:text-[var(--muted)] text-sm;
                 }
                 .input-field-modal {
-                    @apply w-full bg-slate-50 border border-slate-200 rounded-2xl py-3 px-4 text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all font-bold placeholder:text-slate-300 text-sm;
+                    @apply w-full bg-[var(--input)] border border-[var(--border)] rounded-2xl py-3 px-4 text-[var(--foreground)] focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all font-bold placeholder:text-[var(--muted)] text-sm;
                 }
             ` }} />
         </div>

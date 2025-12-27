@@ -10,25 +10,47 @@
 }
 
 :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 47.4% 11.2%;
+    --background: #f8fafc;
+    --foreground: #0f172a;
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+    --border: #f1f5f9;
+    --input: #f1f5f9;
     --primary: 217.2 91.2% 59.8%;
     --primary-foreground: 210 40% 98%;
+    --secondary: #64748b;
+    --muted: #94a3b8;
+}
+
+.dark {
+    --background: #020617;
+    --foreground: #f8fafc;
+    --card: #0f172a;
+    --card-foreground: #f8fafc;
+    --border: #1e293b;
+    --input: #1e293b;
+    --secondary: #94a3b8;
+    --muted: #64748b;
 }
 
 @layer base {
     body {
-        @apply bg-slate-50 text-slate-900 antialiased;
+        background-color: var(--background);
+        color: var(--foreground);
+        @apply antialiased transition-colors duration-300;
         font-family: 'Inter', sans-serif;
     }
 }
 
 .glass-card {
-    @apply bg-white border border-slate-200/60 rounded-2xl shadow-sm;
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    color: var(--card-foreground);
+    @apply rounded-[32px] shadow-sm transition-all duration-300;
 }
 
 .sidebar-link-active {
-    @apply bg-primary/10 text-primary font-semibold;
+    @apply bg-primary text-white shadow-lg shadow-primary/30;
 }
 
 /* Custom Scrollbar */
@@ -41,7 +63,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    @apply bg-slate-200 rounded-full hover:bg-slate-300 transition-colors;
+    background-color: var(--border);
+    @apply rounded-full transition-colors;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--secondary);
 }
 
 .no-scrollbar::-webkit-scrollbar {

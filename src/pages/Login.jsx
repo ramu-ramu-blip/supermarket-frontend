@@ -126,7 +126,7 @@ const Login = () => {
         try {
             const { data } = await api.post('/auth/login', { email, password });
             localStorage.setItem('token', data.token);
-            window.location.href = '/'; // Refresh to trigger layout change
+            window.location.href = '/dashboard'; // Refresh to trigger layout change
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
         } finally {
@@ -135,8 +135,8 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
-            <div className="w-full max-w-6xl bg-white rounded-3xl shadow-2xl shadow-slate-200/50 overflow-hidden">
+        <div className="min-h-screen flex items-center justify-center bg-[var(--background)] p-6 transition-colors duration-300">
+            <div className="w-full max-w-6xl bg-[var(--card)] rounded-3xl shadow-2xl shadow-black/5 overflow-hidden border border-[var(--border)] transition-colors duration-300">
                 <div className="grid grid-cols-1 lg:grid-cols-2">
 
                     {/* Left Card - Supermarket Photo */}
@@ -190,14 +190,14 @@ const Login = () => {
                     <div className="p-10">
                         <div className="max-w-md mx-auto">
                             <div className="text-center mb-10">
-                                <div className="inline-flex p-4 bg-white rounded-3xl shadow-xl shadow-primary/10 border border-slate-100 mb-6">
+                                <div className="inline-flex p-4 bg-[var(--card)] rounded-3xl shadow-xl shadow-primary/10 border border-[var(--border)] mb-6">
                                     <ShoppingBag className="text-primary w-10 h-10" />
                                 </div>
-                                <h1 className="text-4xl font-black tracking-tight text-slate-900 mb-2">Welcome Back</h1>
-                                <p className="text-slate-500 font-medium">Supermarket Billing System Admin Portal</p>
+                                <h1 className="text-4xl font-black tracking-tight text-[var(--foreground)] mb-2">Welcome Back</h1>
+                                <p className="text-[var(--muted)] font-medium">Supermarket Billing System Admin Portal</p>
                             </div>
 
-                            <div className="p-8 bg-white border border-slate-200 shadow-2xl shadow-slate-200/50 rounded-3xl">
+                            <div className="p-8 bg-[var(--card)] border border-[var(--border)] shadow-2xl shadow-black/5 rounded-3xl">
                                 <form onSubmit={handleSubmit} className="space-y-6">
                                     {error && (
                                         <div className="p-4 bg-red-50 border border-red-100 text-red-600 text-sm rounded-2xl text-center font-bold">
@@ -206,13 +206,13 @@ const Login = () => {
                                     )}
 
                                     <div className="space-y-2">
-                                        <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
+                                        <label className="text-xs font-black text-[var(--muted)] uppercase tracking-widest ml-1">Email Address</label>
                                         <div className="relative group">
-                                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={20} />
+                                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-primary transition-colors" size={20} />
                                             <input
                                                 type="email"
                                                 required
-                                                className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 pl-12 pr-4 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-400 font-medium"
+                                                className="w-full bg-[var(--input)] border border-[var(--border)] rounded-2xl py-4 pl-12 pr-4 text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-[var(--muted)] font-medium"
                                                 placeholder="admin@superbill.com"
                                                 value={email}
                                                 onChange={(e) => setEmail(e.target.value)}
@@ -221,13 +221,13 @@ const Login = () => {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Password</label>
+                                        <label className="text-xs font-black text-[var(--muted)] uppercase tracking-widest ml-1">Password</label>
                                         <div className="relative group">
-                                            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={20} />
+                                            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-primary transition-colors" size={20} />
                                             <input
                                                 type="password"
                                                 required
-                                                className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 pl-12 pr-4 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-400 font-medium"
+                                                className="w-full bg-[var(--input)] border border-[var(--border)] rounded-2xl py-4 pl-12 pr-4 text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-[var(--muted)] font-medium"
                                                 placeholder="••••••••"
                                                 value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
@@ -252,7 +252,7 @@ const Login = () => {
                                 </form>
                             </div>
 
-                            <p className="text-center mt-8 text-slate-500 text-sm font-medium">
+                            <p className="text-center mt-8 text-[var(--muted)] text-sm font-medium">
                                 Don't have an account? <span className="text-primary font-black cursor-pointer hover:underline">Contact System Admin</span>
                             </p>
                         </div>
