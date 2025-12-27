@@ -273,7 +273,7 @@ const Transactions = () => {
         <div className="h-full flex flex-col space-y-4 md:space-y-6 animate-in fade-in duration-500 pb-10 md:pb-20 overflow-hidden">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-2xl md:text-3xl font-black text-[var(--foreground)] tracking-tight uppercase">History</h2>
+                    <h2 className="text-[15px] md:text-[15px] font-black text-[var(--foreground)] tracking-tight uppercase">History</h2>
                     <p className="text-[var(--muted)] mt-1 font-medium text-xs md:text-sm">Review and monitor your store's sales records.</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 md:gap-3 font-bold">

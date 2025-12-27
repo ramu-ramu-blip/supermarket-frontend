@@ -66,7 +66,7 @@ const Analytics = () => {
         <div className="h-full overflow-y-auto pr-2 custom-scrollbar space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-20">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-4xl font-black text-[var(--foreground)] tracking-tight">Sales Reports</h2>
+                    <h2 className="text-[16px] md:text-[14px] font-black text-[var(--foreground)] tracking-tight">Sales Reports</h2>
                     <p className="text-[var(--muted)] font-bold mt-1 uppercase text-xs tracking-widest opacity-70">Analyze your business performance</p>
                 </div>
                 <button

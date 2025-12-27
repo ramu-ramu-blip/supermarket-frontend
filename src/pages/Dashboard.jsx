@@ -59,7 +59,7 @@ const Dashboard = () => {
         <div className="h-full overflow-y-auto pr-0 md:pr-2 custom-scrollbar space-y-6 md:space-y-8 animate-in fade-in duration-500 selection:bg-primary/20 selection:text-primary">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-2xl md:text-3xl font-black text-[var(--foreground)] uppercase tracking-tight">Dashboard</h2>
+                    <h2 className="text-[14px] md:text-[14px] font-black text-[var(--foreground)] uppercase tracking-tight">Dashboard</h2>
                     <p className="text-[var(--secondary)] mt-1 font-bold uppercase text-[9px] md:text-[10px] tracking-widest hidden sm:block">Welcome back, here's what's happening today.</p>
                 </div>
                 <button

@@ -251,11 +251,8 @@ const Billing = () => {
         <div className="grid grid-cols-12 gap-4 md:gap-8 flex-1 animate-in fade-in duration-500">
             {/* Search & Results */}
             <div className="col-span-12 lg:col-span-8 flex flex-col gap-4 md:gap-6">
-                <div className="glass-card p-4 md:p-6">
-                    <h2 className="text-lg md:text-xl font-bold mb-4 flex items-center gap-2 text-[var(--foreground)]">
-                        <Search className="text-primary" size={22} md:size={24} />
-                        Search Products
-                    </h2>
+                <div className="glass-card ">
+
                     <div className="relative">
                         <input
                             type="text"
@@ -453,7 +450,7 @@ const Billing = () => {
                         <span className="text-rose-600 font-bold">-₹{Number(discount).toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between pt-4 border-t border-[var(--border)] mt-2">
-                        <span className="text-xl font-black text-[var(--foreground)] uppercase tracking-tighter">Grand Total</span>
+                        <span className="text[14px] font-black text-[var(--foreground)] uppercase tracking-tighter">Grand Total</span>
                         <span className="text-2xl font-black text-emerald-600">₹{Math.max(0, finalTotal).toFixed(2)}</span>
                     </div>
 
