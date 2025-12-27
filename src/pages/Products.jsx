@@ -167,7 +167,7 @@ const Products = () => {
 
 
     return (
-        <div className="space-y-6 animate-in slide-in-from-bottom-4 duration-500">
+        <div className="h-full flex flex-col space-y-6 animate-in slide-in-from-bottom-4 duration-500 overflow-hidden">
             <div className="flex items-center justify-between">
                 <div>
                     <h2 className="text-3xl font-black text-slate-900 tracking-tight uppercase">Inventory</h2>
@@ -185,7 +185,7 @@ const Products = () => {
                         onClick={() => fileInputRef.current?.click()}
                         className="px-5 py-3 bg-white border border-slate-200 text-slate-600 font-bold rounded-2xl hover:bg-slate-50 transition-all flex items-center gap-2 shadow-sm active:scale-95"
                     >
-                        <Upload size={18} />
+                        <Upload size={18} className='rotate-180' />
                         Import CSV
                     </button>
                     <button
@@ -210,8 +210,8 @@ const Products = () => {
             </div>
 
             {/* Products Table */}
-            <div className="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden mb-20">
-                <div className="overflow-x-auto max-h-[calc(100vh-320px)] custom-scrollbar">
+            <div className="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden flex-1 flex flex-col min-h-0 mb-6">
+                <div className="overflow-y-auto overflow-x-auto flex-1 custom-scrollbar">
                     <table className="w-full text-left border-collapse">
                         <thead className="sticky top-0 z-10 bg-slate-50 border-b border-slate-100 shadow-sm">
                             <tr className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">

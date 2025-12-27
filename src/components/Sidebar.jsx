@@ -1,28 +1,32 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
+    LogOut,
+    ShoppingBag,
     LayoutDashboard,
     Package,
-    ShoppingCart,
+    ReceiptText,
     BarChart3,
-    History,
-    LogOut,
-    ShoppingBag
+    History
 } from 'lucide-react';
+import ConfirmationModal from './ConfirmationModal';
+import { useState } from 'react';
 
 const Sidebar = () => {
     const navigate = useNavigate();
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
 
     const menuItems = [
-        { name: 'Dashboard', icon: LayoutDashboard, path: '/' },
+        { name: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
         { name: 'Products', icon: Package, path: '/products' },
-        { name: 'Billing', icon: ShoppingCart, path: '/billing' },
+        { name: 'Billing', icon: ReceiptText, path: '/billing' },
         { name: 'Analytics', icon: BarChart3, path: '/analytics' },
         { name: 'Transactions', icon: History, path: '/transactions' },
     ];
 
-    const handleLogout = () => {
+    const handleLogoutConfirm = () => {
         localStorage.removeItem('token');
-        window.location.href = '/login';
+        localStorage.removeItem('userInfo');
+        navigate('/login');
     };
 
     return (
@@ -31,8 +35,8 @@ const Sidebar = () => {
                 <div className="p-2 bg-primary rounded-xl shadow-md shadow-primary/20">
                     <ShoppingBag className="text-white w-6 h-6" />
                 </div>
-                <h1 className="text-xl font-bold tracking-tight text-slate-900">
-                    SUPERBILL
+                <h1 className="text-xl font-bold tracking-tight text-slate-900 uppercase">
+                    SuperMarket
                 </h1>
             </div>
 
@@ -42,28 +46,42 @@ const Sidebar = () => {
                         key={item.name}
                         to={item.path}
                         className={({ isActive }) => `
-                            flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200
+                            flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
                             ${isActive
-                                ? 'bg-primary/10 text-primary'
+                                ? 'bg-primary text-white shadow-lg shadow-primary/30'
                                 : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'}
                         `}
                     >
-                        <item.icon size={20} />
-                        <span className="font-medium">{item.name}</span>
+                        <div className={`
+                            w-6 h-6 flex items-center justify-center transition-all duration-200
+                            ${({ isActive }) => isActive ? 'scale-110' : 'group-hover:scale-110'}
+                        `}>
+                            <item.icon size={20} strokeWidth={2.5} />
+                        </div>
+                        <span className="font-bold text-sm uppercase tracking-wide">{item.name}</span>
                     </NavLink>
                 ))}
             </nav>
 
             <div className="p-4 border-t border-slate-100">
                 <button
-                    onClick={handleLogout}
+                    onClick={() => setShowLogoutModal(true)}
                     className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-500 transition-all duration-200 font-medium"
                 >
-                    <LogOut size={20} />
                     <span>Logout</span>
                 </button>
             </div>
-        </aside>
+
+            <ConfirmationModal
+                isOpen={showLogoutModal}
+                onClose={() => setShowLogoutModal(false)}
+                onConfirm={handleLogoutConfirm}
+                title="Logout"
+                message="Are you sure you want to log out of the admin portal?"
+                confirmText="Logout"
+                isDangerous={true}
+            />
+        </aside >
     );
 };
 

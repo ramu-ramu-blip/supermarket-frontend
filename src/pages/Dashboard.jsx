@@ -33,15 +33,19 @@ const Dashboard = () => {
     };
 
     useEffect(() => {
-        const fetchStats = async () => {
+        const fetchDashboardData = async () => {
             try {
-                const { data } = await api.get('/analytics');
-                setStats(data);
+                const [statsRes, expiryRes] = await Promise.all([
+                    api.get('/analytics'),
+                    api.get('/products/expiring')
+                ]);
+                setStats(statsRes.data);
+                setExpiringProducts(expiryRes.data);
             } catch (error) {
-                console.error('Error fetching analytics:', error);
+                console.error('Error fetching dashboard data:', error);
             }
         };
-        fetchStats();
+        fetchDashboardData();
     }, []);
 
     const cards = [
@@ -52,17 +56,24 @@ const Dashboard = () => {
     ];
 
     return (
-        <div className="space-y-8 animate-in fade-in duration-500">
+        <div className="h-full overflow-y-auto pr-2 custom-scrollbar space-y-8 animate-in fade-in duration-500">
             <div className="flex items-center justify-between">
                 <div>
                     <h2 className="text-3xl font-bold text-slate-900">Dashboard</h2>
                     <p className="text-slate-500 mt-1 font-medium">Welcome back, here's what's happening today.</p>
                 </div>
                 <button
-                    onClick={fetchExpiringProducts}
+                    onClick={() => setShowExpiryModal(true)}
                     className="px-6 py-2.5 bg-rose-500 text-white font-semibold rounded-xl hover:bg-rose-600 transition-all flex items-center gap-2 shadow-lg shadow-rose-500/20 active:scale-95"
                 >
-                    <AlertCircle size={20} />
+                    <div className="relative">
+                        <AlertCircle size={20} />
+                        {expiringProducts.length > 0 && (
+                            <span className="absolute -top-2 -right-2 bg-white text-rose-600 text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-rose-500 shadow-sm">
+                                {expiringProducts.length}
+                            </span>
+                        )}
+                    </div>
                     Expiry Alerts
                 </button>
             </div>

@@ -37,13 +37,15 @@ const Navbar = () => {
                 </button>
             </div>
 
-            {showProfileModal && (
-                <ProfileModal
-                    onClose={() => setShowProfileModal(false)}
-                    onUpdate={(updatedUser) => setUserInfo(updatedUser)}
-                />
-            )}
-        </header>
+            {
+                showProfileModal && (
+                    <ProfileModal
+                        onClose={() => setShowProfileModal(false)}
+                        onUpdate={(updatedUser) => setUserInfo(updatedUser)}
+                    />
+                )
+            }
+        </header >
     );
 };
 

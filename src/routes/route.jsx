@@ -8,6 +8,8 @@ import Analytics from '../pages/Analytics';
 import Transactions from '../pages/Transactions';
 import Login from '../pages/Login';
 
+import Landing from '../pages/Landing';
+
 const MainLayout = () => {
     const isAuthenticated = !!localStorage.getItem('token');
 
@@ -22,7 +24,7 @@ const MainLayout = () => {
                 <div className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-slate-100">
                     <Navbar />
                 </div>
-                <main className="flex-1 overflow-y-auto p-8 custom-scrollbar">
+                <main className="flex-1 p-8 overflow-hidden flex flex-col min-h-0">
                     <Outlet />
                 </main>
             </div>
@@ -32,31 +34,34 @@ const MainLayout = () => {
 
 const router = createBrowserRouter([
     {
+        path: '/',
+        element: <Landing />,
+    },
+    {
         path: '/login',
         element: <Login />,
     },
     {
-        path: '/',
         element: <MainLayout />,
         children: [
             {
-                index: true,
+                path: '/dashboard',
                 element: <Dashboard />,
             },
             {
-                path: 'products',
+                path: '/products',
                 element: <Products />,
             },
             {
-                path: 'billing',
+                path: '/billing',
                 element: <Billing />,
             },
             {
-                path: 'analytics',
+                path: '/analytics',
                 element: <Analytics />,
             },
             {
-                path: 'transactions',
+                path: '/transactions',
                 element: <Transactions />,
             },
         ],

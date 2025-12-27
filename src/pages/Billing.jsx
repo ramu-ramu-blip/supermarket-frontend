@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Search, ShoppingCart, Trash2, IndianRupee, Printer, Download, Plus, Minus } from 'lucide-react';
+import { Search, ShoppingCart, Trash2, IndianRupee, Printer, Download, Plus, Minus, ChevronDown } from 'lucide-react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
 
@@ -247,9 +247,9 @@ const Billing = () => {
     };
 
     return (
-        <div className="grid grid-cols-12 gap-8 h-[calc(100vh-140px)] animate-in fade-in duration-500">
+        <div className="grid grid-cols-12 gap-8 flex-1 min-h-0 animate-in fade-in duration-500 overflow-hidden">
             {/* Search & Results */}
-            <div className="col-span-12 lg:col-span-8 flex flex-col gap-6">
+            <div className="col-span-12 lg:col-span-8 flex flex-col gap-6 h-full min-h-0">
                 <div className="glass-card p-6 bg-white">
                     <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-slate-900">
                         <Search className="text-primary" size={24} />
@@ -270,13 +270,13 @@ const Billing = () => {
                 <div className="bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden flex-1 flex flex-col min-h-0">
                     <div className="overflow-y-auto custom-scrollbar flex-1">
                         <table className="w-full text-left border-collapse">
-                            <thead className="sticky top-0 z-10 bg-slate-50 border-b border-slate-100 shadow-sm">
+                            <thead className="sticky top-0 z-10 bg-slate-50 shadow-[0_1px_0_0_rgba(0,0,0,0.05)]">
                                 <tr className="text-slate-400 text-[10px] font-black uppercase tracking-widest">
-                                    <th className="px-6 py-4">Product Name</th>
-                                    <th className="px-6 py-4 text-center">Category</th>
-                                    <th className="px-6 py-4 text-center">Stock</th>
-                                    <th className="px-6 py-4 text-right">Price</th>
-                                    <th className="px-6 py-4 text-right">Action</th>
+                                    <th className="px-6 py-4 bg-slate-50">Product Name</th>
+                                    <th className="px-6 py-4 text-center bg-slate-50">Category</th>
+                                    <th className="px-6 py-4 text-center bg-slate-50">Stock</th>
+                                    <th className="px-6 py-4 text-right bg-slate-50">Price</th>
+                                    <th className="px-6 py-4 text-right bg-slate-50">Action</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100">
@@ -373,24 +373,30 @@ const Billing = () => {
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Payment Mode</label>
-                            <select
-                                value={paymentMode}
-                                onChange={(e) => setPaymentMode(e.target.value)}
-                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 text-slate-900 font-bold appearance-none transition-all cursor-pointer"
-                            >
-                                <option value="Cash">Cash</option>
-                                <option value="Card">Card</option>
-                                <option value="UPI">UPI</option>
-                            </select>
+                            <div className="relative">
+                                <select
+                                    value={paymentMode}
+                                    onChange={(e) => setPaymentMode(e.target.value)}
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 text-slate-900 font-bold appearance-none transition-all cursor-pointer"
+                                >
+                                    <option value="Cash">Cash</option>
+                                    <option value="Card">Card</option>
+                                    <option value="UPI">UPI</option>
+                                </select>
+                                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={16} />
+                            </div>
                         </div>
                         <div className="space-y-2">
                             <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Discount (₹)</label>
                             <input
                                 type="number"
-                                placeholder="0"
                                 className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 text-slate-900 font-bold transition-all"
-                                value={discount}
-                                onChange={(e) => setDiscount(Math.max(0, e.target.value))}
+                                value={discount === 0 ? '' : discount}
+                                placeholder="0"
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    setDiscount(val === '' ? 0 : Math.max(0, Number(val)));
+                                }}
                             />
                         </div>
                     </div>
