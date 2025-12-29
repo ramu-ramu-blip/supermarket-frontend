@@ -17,14 +17,16 @@ const ProfileModal = ({ onClose, onUpdate }) => {
 
     useEffect(() => {
         const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
-        setFormData({
-            name: userInfo.name || '',
-            email: userInfo.email || '',
-            address: userInfo.address || '',
-            phone: userInfo.phone || '',
-            supermarketName: userInfo.supermarketName || '',
-            password: '',
-        });
+        if (userInfo && Object.keys(userInfo).length > 0) {
+            setFormData({
+                name: userInfo.name || '',
+                email: userInfo.email || '',
+                address: userInfo.address || '',
+                phone: userInfo.phone || '',
+                supermarketName: userInfo.supermarketName || '',
+                password: '',
+            });
+        }
     }, []);
 
     const handleChange = (e) => {
@@ -51,7 +53,7 @@ const ProfileModal = ({ onClose, onUpdate }) => {
 
     return createPortal(
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-            <div className="bg-[var(--card)] w-full max-w-lg rounded-[32px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 max-h-[90vh] flex flex-col border border-[var(--border)] transition-colors duration-300">
+            <div className="bg-[var(--card)] w-full max-w-lg rounded-[8px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 max-h-[90vh] flex flex-col border border-[var(--border)] transition-colors duration-300">
                 <div className="px-8 py-5 border-b border-[var(--border)] flex items-center justify-between bg-[var(--card)] flex-shrink-0 transition-colors duration-300">
                     <h2 className="text-xl font-black text-[var(--foreground)] tracking-tight flex items-center gap-3 transition-colors duration-300">
                         <span className="p-2 bg-primary/10 text-primary rounded-xl"><User size={20} /></span>

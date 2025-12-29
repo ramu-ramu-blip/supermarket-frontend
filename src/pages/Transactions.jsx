@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Calendar, Search, Filter, Eye, Download, Trash2, ChevronLeft, ChevronRight, X, Layers, ChevronDown } from 'lucide-react';
+import { Calendar, Search, Filter, Eye, Download, Trash2, ChevronLeft, ChevronRight, X, Layers, ChevronDown, Printer } from 'lucide-react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
 import ConfirmationModal from '../components/ConfirmationModal';
@@ -8,7 +8,8 @@ const Transactions = () => {
     const [transactions, setTransactions] = useState([]);
     const [search, setSearch] = useState('');
     const [selectedBill, setSelectedBill] = useState(null);
-    const [selectedDate, setSelectedDate] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
     const [sortMethod, setSortMethod] = useState(''); // 'Cash', 'Card', 'UPI'
 
     // Export State
@@ -65,9 +66,9 @@ const Transactions = () => {
             return;
         }
 
-        const start = new Date(exportStartDate);
-        const end = new Date(exportEndDate);
-        end.setHours(23, 59, 59, 999); // Include the entire end day
+        // Parse dates as local midnight to midnight range to avoid timezone shifts
+        const start = new Date(exportStartDate + 'T00:00:00');
+        const end = new Date(exportEndDate + 'T23:59:59');
 
         const exportData = transactions.filter(t => {
             const date = new Date(t.createdAt);
@@ -79,35 +80,44 @@ const Transactions = () => {
             return;
         }
 
-        const csvContent = [
-            ['Invoice No', 'Date', 'Time', 'Customer', 'Payment Mode', 'Total Amount', 'GST Amount', 'Discount', 'Net Amount'],
-            ...exportData.map(t => [
+        try {
+            const headers = ['Invoice No', 'Date', 'Time', 'Customer', 'Payment Mode', 'Total Amount', 'GST Amount', 'Discount', 'Net Amount'];
+            const rows = exportData.map(t => [
                 t.invoiceNumber,
                 new Date(t.createdAt).toLocaleDateString(),
                 new Date(t.createdAt).toLocaleTimeString(),
-                t.customerName || 'Walk-in',
+                `"${(t.customerName || 'Walk-in').replace(/"/g, '""')}"`, // Handle commas in names
                 t.paymentMode,
-                t.totalAmount,
-                t.gstAmount,
-                t.discountAmount,
-                t.netAmount
-            ])
-        ].map(e => e.join(',')).join('\n');
+                t.totalAmount.toFixed(2),
+                t.gstAmount.toFixed(2),
+                t.discountAmount.toFixed(2),
+                t.netAmount.toFixed(2)
+            ]);
 
-        const blob = new Blob([csvContent], { type: 'text/csv' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `transactions_${exportStartDate}_to_${exportEndDate}.csv`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
+            const csvContent = [headers, ...rows].map(e => e.join(',')).join('\n');
+            const blob = new Blob(['\ufeff', csvContent], { type: 'text/csv;charset=utf-8' }); // Add BOM for Excel
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = `transactions_${exportStartDate}_to_${exportEndDate}.csv`;
+            document.body.appendChild(a);
+            a.click();
 
-        setShowExportModal(false);
-        setExportStartDate('');
-        setExportEndDate('');
-        toast.success(`Exported ${exportData.length} transactions`);
+            // Cleanup
+            setTimeout(() => {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 100);
+
+            setShowExportModal(false);
+            setExportStartDate('');
+            setExportEndDate('');
+            toast.success(`Successfully exported ${exportData.length} transactions`);
+        } catch (error) {
+            console.error('Export failed:', error);
+            toast.error('Failed to generate export file');
+        }
     };
 
     const generatePrint = (bill) => {
@@ -117,6 +127,10 @@ const Transactions = () => {
         const storePhone = userInfo.phone || '9876543210';
 
         const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+            toast.error('Pop-up blocked! Please allow pop-ups to print the receipt.');
+            return;
+        }
         const content = `
             <html>
                 <head>
@@ -158,7 +172,12 @@ const Transactions = () => {
                     <div class="header text-center">
                         <div class="restaurant-name">${storeName}</div>
                         <div style="white-space: pre-line;">${storeAddress}</div>
-                        <div>Ph: ${storePhone}</div>
+                        <div>Store Ph: ${storePhone}</div>
+                        <div class="divider" style="margin: 5px 0;"></div>
+                        <div style="text-align: left; font-size: 10px;">
+                            <div>Customer: ${bill.customerName || 'Walk-in'}</div>
+                            <div>Phone: ${bill.customerPhone}</div>
+                        </div>
                     </div>
                     
                     <div class="divider"></div>
@@ -171,7 +190,7 @@ const Transactions = () => {
                     </div>
                     <div class="info-row">
                         <span>Date: ${new Date(bill.createdAt).toLocaleDateString()}</span>
-                        <span>Type: Dine In</span>
+                  
                     </div>
 
                     <div class="divider"></div>
@@ -250,7 +269,21 @@ const Transactions = () => {
         const matchesSearch = t.invoiceNumber.toLowerCase().includes(search.toLowerCase()) ||
             (t.customerName && t.customerName.toLowerCase().includes(search.toLowerCase()));
 
-        const matchesDate = selectedDate ? new Date(t.createdAt).toLocaleDateString() === new Date(selectedDate).toLocaleDateString() : true;
+        const transactionDate = new Date(t.createdAt);
+        transactionDate.setHours(0, 0, 0, 0);
+
+        let matchesDate = true;
+        if (startDate) {
+            const start = new Date(startDate);
+            start.setHours(0, 0, 0, 0);
+            matchesDate = matchesDate && transactionDate >= start;
+        }
+        if (endDate) {
+            const end = new Date(endDate);
+            end.setHours(0, 0, 0, 0);
+            matchesDate = matchesDate && transactionDate <= end;
+        }
+
         const matchesSort = sortMethod ? t.paymentMode === sortMethod : true;
 
         return matchesSearch && matchesDate && matchesSort;
@@ -267,7 +300,7 @@ const Transactions = () => {
     // Reset page on filter change
     useEffect(() => {
         setCurrentPage(1);
-    }, [search, selectedDate, sortMethod]);
+    }, [search, startDate, endDate, sortMethod]);
 
     return (
         <div className="h-full flex flex-col space-y-4 md:space-y-6 animate-in fade-in duration-500 pb-10 md:pb-20 overflow-hidden">
@@ -298,75 +331,96 @@ const Transactions = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 md:gap-4 overflow-x-auto pb-2 custom-scrollbar">
+                <div className="flex-1 min-w-[300px] flex items-center gap-2">
+                    <div className="flex-1">
+                        <label className="text-[9px] font-black text-[var(--muted)] uppercase tracking-widest ml-1 mb-1 block">From</label>
+                        <input
+                            type="date"
+                            max={endDate || new Date().toISOString().split('T')[0]}
+                            className="w-full bg-[var(--card)] border border-[var(--border)] rounded-xl md:rounded-2xl py-2.5 md:py-3 px-4 md:px-5 text-xs md:text-sm font-bold text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex-1">
+                        <label className="text-[9px] font-black text-[var(--muted)] uppercase tracking-widest ml-1 mb-1 block">To</label>
+                        <input
+                            type="date"
+                            min={startDate}
+                            max={new Date().toISOString().split('T')[0]}
+                            className="w-full bg-[var(--card)] border border-[var(--border)] rounded-xl md:rounded-2xl py-2.5 md:py-3 px-4 md:px-5 text-xs md:text-sm font-bold text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer"
+                            value={endDate}
+                            onChange={(e) => setEndDate(e.target.value)}
+                        />
+                    </div>
+                </div>
                 <div className="flex-1 min-w-[150px]">
-                    <input
-                        type="date"
-                        max={new Date().toISOString().split('T')[0]}
-                        className="w-full bg-[var(--card)] border border-[var(--border)] rounded-xl md:rounded-2xl py-2.5 md:py-3 px-4 md:px-5 text-xs md:text-sm font-bold text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer"
-                        value={selectedDate}
-                        onChange={(e) => setSelectedDate(e.target.value)}
-                    />
+                    <label className="text-[9px] font-black text-[var(--muted)] uppercase tracking-widest ml-1 mb-1 block">Method</label>
+                    <div className="relative">
+                        <select
+                            className="w-full bg-[var(--card)] border border-[var(--border)] rounded-xl md:rounded-2xl py-2.5 md:py-3 px-4 md:px-5 text-xs md:text-sm font-bold text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer appearance-none"
+                            value={sortMethod}
+                            onChange={(e) => setSortMethod(e.target.value)}
+                        >
+                            <option value="">All Payments</option>
+                            <option value="Cash">Cash Only</option>
+                            <option value="Card">Card Only</option>
+                            <option value="UPI">UPI Only</option>
+                        </select>
+                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--muted)] pointer-events-none" size={16} />
+                    </div>
                 </div>
-                <div className="flex-1 min-w-[150px] relative">
-                    <select
-                        className="w-full bg-[var(--card)] border border-[var(--border)] rounded-xl md:rounded-2xl py-2.5 md:py-3 px-4 md:px-5 text-xs md:text-sm font-bold text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer appearance-none"
-                        value={sortMethod}
-                        onChange={(e) => setSortMethod(e.target.value)}
-                    >
-                        <option value="">All Payments</option>
-                        <option value="Cash">Cash Only</option>
-                        <option value="Card">Card Only</option>
-                        <option value="UPI">UPI Only</option>
-                    </select>
-                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--muted)] pointer-events-none" size={16} />
-                </div>
-                {(search || selectedDate || sortMethod) && (
-                    <button
-                        onClick={() => { setSearch(''); setSelectedDate(''); setSortMethod(''); }}
-                        className="px-4 py-2.5 md:py-3 text-rose-500 font-bold text-xs md:text-sm hover:text-rose-600 transition-all whitespace-nowrap"
-                    >
-                        Clear Filters
-                    </button>
+                {(search || startDate || endDate || sortMethod) && (
+                    <div className="flex items-end mb-1">
+                        <button
+                            onClick={() => { setSearch(''); setStartDate(''); setEndDate(''); setSortMethod(''); }}
+                            className="px-4 py-2.5 md:py-3 text-rose-500 font-bold text-xs md:text-sm hover:text-rose-600 transition-all whitespace-nowrap"
+                        >
+                            Clear Filters
+                        </button>
+                    </div>
                 )}
             </div>
 
+
+
             {/* Transactions Table */}
-            <div className="bg-[var(--card)] rounded-[20px] md:rounded-[32px] border border-[var(--border)] shadow-sm overflow-hidden flex-1 flex flex-col min-h-0 transition-colors duration-300">
+            <div className="bg-[var(--card)] rounded-[8px] border border-[var(--border)] shadow-sm overflow-hidden flex-1 flex flex-col min-h-0 transition-colors duration-300">
                 <div className="overflow-x-auto custom-scrollbar flex-1">
                     <table className="w-full text-left border-collapse min-w-[750px]">
                         <thead className="sticky top-0 z-10 bg-[var(--input)] border-b border-[var(--border)] shadow-[0_1px_0_0_rgba(0,0,0,0.05)] transition-colors duration-300">
                             <tr className="text-[var(--muted)] text-[8px] md:text-[10px] font-black uppercase tracking-widest transition-colors duration-300">
-                                <th className="px-2 md:px-6 py-2 md:py-5">INVOICE NO</th>
-                                <th className="px-2 md:px-6 py-2 md:py-5">DATE & TIME</th>
-                                <th className="px-2 md:px-6 py-2 md:py-5">CUSTOMER</th>
-                                <th className="px-2 md:px-6 py-2 md:py-5">METHOD</th>
-                                <th className="px-2 md:px-6 py-2 md:py-5 text-right">AMOUNT</th>
-                                <th className="px-2 md:px-6 py-2 md:py-5 text-center">ACTIONS</th>
+                                <th className="px-2 md:px-6 py-2 md:py-2">INVOICE NO</th>
+                                <th className="px-2 md:px-6 py-2 md:py-2">DATE & TIME</th>
+                                <th className="px-2 md:px-6 py-2 md:py-2">CUSTOMER</th>
+                                <th className="px-2 md:px-6 py-2 md:py-2">METHOD</th>
+                                <th className="px-2 md:px-6 py-2 md:py-2 text-right">AMOUNT</th>
+                                <th className="px-2 md:px-6 py-2 md:py-2 text-center">ACTIONS</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-[var(--border)] font-medium">
                             {currentItems.map((t) => (
                                 <tr key={t._id} className="bg-[var(--card)] hover:bg-[var(--input)]/50 transition-all group">
-                                    <td className="px-2 md:px-6 py-2.5 md:py-6 font-black text-primary text-[11px] md:text-sm hover:underline cursor-pointer" onClick={() => setSelectedBill(t)}>
+                                    <td className="px-2 md:px-6 py-2 md:py-2 font-black  text-[10px] md:text-sm hover:underline cursor-pointer" onClick={() => setSelectedBill(t)}>
                                         {t.invoiceNumber}
                                     </td>
-                                    <td className="px-2 md:px-6 py-2.5 md:py-6">
-                                        <div className="font-black text-[var(--foreground)] text-[11px] md:text-sm">{new Date(t.createdAt).toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' })}</div>
+                                    <td className="px-2 md:px-6 py-2 md:py-2">
+                                        <div className="font-black text-[var(--foreground)] text-[10px] md:text-[12px]">{new Date(t.createdAt).toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' })}</div>
                                         <div className="text-[8px] md:text-[10px] font-black text-[var(--muted)] uppercase tracking-widest mt-0.5">{new Date(t.createdAt).toLocaleTimeString()}</div>
                                     </td>
-                                    <td className="px-2 md:px-6 py-2.5 md:py-6">
-                                        <div className="font-black text-[var(--secondary)] text-[11px] md:text-sm uppercase truncate max-w-[100px] md:max-w-none">{t.customerName || 'Walk-in Customer'}</div>
-                                        <div className="text-[8px] md:text-[10px] font-bold text-[var(--muted)] mt-0.5 uppercase">Counter Sale</div>
+                                    <td className="px-2 md:px-6 py-2 md:py-2">
+                                        <div className="font-black text-[var(--secondary)] text-[10px] md:text-[12px] uppercase truncate max-w-[100px] md:max-w-none">{t.customerName || 'Walk-in Customer'}</div>
+
                                     </td>
-                                    <td className="px-2 md:px-6 py-2.5 md:py-6">
-                                        <span className={`px-1.5 md:px-3 py-0.5 md:py-1.5 rounded-md md:rounded-xl text-[8px] md:text-[10px] font-black uppercase tracking-wider border shadow-sm ${t.paymentMode === 'Cash' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
+                                    <td className="px-2 md:px-6 py-2 md:py-2">
+                                        <span className={`px-1.5 md:px-3 py-0.5 md:py-1.5 rounded-md md:rounded-xl text-[10px] md:text-[10px] font-black uppercase tracking-wider border shadow-sm ${t.paymentMode === 'Cash' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
                                             t.paymentMode === 'UPI' ? 'bg-sky-500/10 text-sky-600 border-sky-500/20' : 'bg-blue-500/10 text-blue-600 border-blue-500/20'
                                             }`}>
                                             {t.paymentMode}
                                         </span>
                                     </td>
-                                    <td className="px-2 md:px-6 py-2.5 md:py-6 text-right font-black text-[var(--foreground)] text-sm md:text-lg">₹{t.netAmount.toFixed(2)}</td>
-                                    <td className="px-2 md:px-6 py-2.5 md:py-6">
+                                    <td className="px-2 md:px-6 py-2 md:py-2 text-right font-black text-[var(--foreground)] text-sm md:text-[12px]">₹{t.netAmount.toFixed(2)}</td>
+                                    <td className="px-2 md:px-6 py-2 md:py-2">
                                         <div className="flex items-center justify-center gap-1.5 md:gap-3">
                                             <button
                                                 onClick={() => setSelectedBill(t)}
@@ -378,9 +432,9 @@ const Transactions = () => {
                                             <button
                                                 onClick={() => generatePrint(t)}
                                                 className="p-1.5 md:p-3 hover:bg-emerald-500/10 text-emerald-600 rounded-lg md:rounded-2xl transition-all shadow-sm border border-transparent hover:border-emerald-500/20"
-                                                title="Download Receipt"
+                                                title="Print Receipt"
                                             >
-                                                <Download size={14} md:size={18} />
+                                                <Printer size={14} md:size={18} />
                                             </button>
                                             <button
                                                 onClick={() => handleDeleteClick(t._id)}
@@ -448,7 +502,7 @@ const Transactions = () => {
             {
                 selectedBill && (
                     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-300">
-                        <div className="bg-[var(--card)] w-full max-w-4xl rounded-[32px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-300 border border-[var(--border)] transition-colors duration-300">
+                        <div className="bg-[var(--card)] w-full max-w-4xl rounded-[8px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-300 border border-[var(--border)] transition-colors duration-300">
                             {/* Modal Header */}
                             <div className="px-10 pt-10 pb-6 flex items-start justify-between relative">
                                 <div className="flex items-start gap-4">
@@ -477,6 +531,7 @@ const Transactions = () => {
                                     <div className="space-y-1.5">
                                         <label className="text-[10px] font-black text-[var(--muted)] uppercase tracking-[0.15em] opacity-80">Customer</label>
                                         <div className="font-black text-[var(--foreground)] text-lg leading-tight">{selectedBill.customerName || 'Walk-in'}</div>
+                                        <div className="text-[11px] font-black text-[var(--muted)] tracking-wider mt-1">{selectedBill.customerPhone}</div>
                                     </div>
                                     <div className="space-y-1.5 text-right">
                                         <label className="text-[10px] font-black text-[var(--muted)] uppercase tracking-[0.15em] opacity-80">Transaction Date</label>
@@ -525,7 +580,7 @@ const Transactions = () => {
                                 </div>
 
                                 {/* Summary Box */}
-                                <div className="bg-[var(--input)] rounded-[32px] p-8 space-y-5 border-2 border-[var(--border)] shadow-sm">
+                                <div className="bg-[var(--input)] rounded-[8px] p-8 space-y-5 border-2 border-[var(--border)] shadow-sm">
                                     <div className="flex justify-between items-center text-[var(--muted)] text-[10px] font-black uppercase tracking-[0.2em]">
                                         <span>Base Summary</span>
                                         <span className="text-[var(--foreground)]">₹{selectedBill.totalAmount.toFixed(2)}</span>
@@ -558,7 +613,7 @@ const Transactions = () => {
                                     }}
                                     className="flex-1 py-5 bg-primary text-white font-black rounded-2xl hover:bg-primary/90 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-xl shadow-primary/30 active:scale-95"
                                 >
-                                    <Download size={18} />
+                                    <Printer size={18} />
                                     Print Invoice
                                 </button>
                             </div>
@@ -570,7 +625,7 @@ const Transactions = () => {
             {
                 showExportModal && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-300">
-                        <div className="bg-[var(--card)] w-full max-w-md rounded-[32px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 border border-[var(--border)] transition-colors duration-300">
+                        <div className="bg-[var(--card)] w-full max-w-md rounded-[8px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 border border-[var(--border)] transition-colors duration-300">
                             <div className="px-8 py-6 border-b border-[var(--border)] flex items-center justify-between bg-[var(--input)]/50">
                                 <div>
                                     <h3 className="text-xl font-black text-[var(--foreground)] tracking-tight flex items-center gap-2 uppercase">

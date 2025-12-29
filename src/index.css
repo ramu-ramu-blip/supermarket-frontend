@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-    --color-primary: hsl(217.2 91.2% 59.8%);
+    --color-primary: hsl(258, 81%, 62%);
     --color-primary-foreground: hsl(210 40% 98%);
 
     --radius-xl: 0.75rem;
@@ -16,7 +16,7 @@
     --card-foreground: #0f172a;
     --border: #f1f5f9;
     --input: #f1f5f9;
-    --primary: 217.2 91.2% 59.8%;
+    --primary: hsl(258, 81%, 62%);
     --primary-foreground: 210 40% 98%;
     --secondary: #64748b;
     --muted: #94a3b8;
@@ -30,7 +30,7 @@
     --border: #1e293b;
     --input: #1e293b;
     --secondary: #94a3b8;
-    --muted: #64748b;
+    --muted: #9da4ad;
 }
 
 @layer base {
@@ -46,7 +46,7 @@
     background-color: var(--card);
     border: 1px solid var(--border);
     color: var(--card-foreground);
-    @apply rounded-[32px] shadow-sm transition-all duration-300;
+    @apply rounded-[8px] shadow-sm transition-all duration-300;
 }
 
 .sidebar-link-active {

@@ -10,9 +10,15 @@ import {
     Wallet,
     X,
     Calendar,
-    Package
+    Package,
+    ChevronRight,
+    ArrowRight,
+    History
 } from 'lucide-react';
+
+import { Link } from 'react-router-dom';
 import api from '../services/api';
+
 
 const Dashboard = () => {
     const [stats, setStats] = useState({
@@ -49,8 +55,8 @@ const Dashboard = () => {
     }, []);
 
     const cards = [
-        { title: 'Total Revenue', value: `₹${stats.today?.total || 0}`, icon: IndianRupee, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-        { title: 'Total Invoices', value: stats.today?.count || 0, icon: Layers, color: 'text-blue-600', bg: 'bg-blue-50' },
+        { title: 'Today Revenue', value: `₹${stats.today?.total || 0}`, icon: IndianRupee, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+
         { title: 'Average Sale', value: `₹${stats.today?.count ? (stats.today.total / stats.today.count).toFixed(2) : 0}`, icon: ArrowUpRight, color: 'text-violet-600', bg: 'bg-violet-50' },
         { title: 'Total Tax', value: `₹${stats.today?.gst || 0}`, icon: CreditCard, color: 'text-amber-600', bg: 'bg-amber-50' },
     ];
@@ -85,7 +91,7 @@ const Dashboard = () => {
                             <p className="text-[var(--muted)] text-[9px] md:text-[10px] font-black uppercase tracking-widest">{card.title}</p>
                             <h3 className="text-xl md:text-2xl font-black mt-2 text-[var(--foreground)]">{card.value}</h3>
                         </div>
-                        <div className={`p-2.5 md:p-3 rounded-2xl ${card.bg} ${card.color} transition-transform group-hover:scale-110 duration-300`}>
+                        <div className={`p-2.5 md:p-3 rounded-[10px] ${card.bg} ${card.color} transition-transform group-hover:scale-110 duration-300`}>
                             <card.icon size={22} md:size={24} />
                         </div>
                     </div>
@@ -94,32 +100,53 @@ const Dashboard = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
                 <div className="glass-card p-6 md:p-8">
-                    <h3 className="text-base md:text-lg font-black text-[var(--foreground)] mb-6 md:mb-8 uppercase tracking-tight font-sans">Today's Sales Breakdown</h3>
-                    <div className="space-y-3 md:space-y-4">
-                        {[
-                            { label: 'Cash', icon: Wallet, color: 'bg-emerald-500' },
-                            { label: 'UPI', icon: Smartphone, color: 'bg-sky-500' },
-                            { label: 'Card', icon: CreditCard, color: 'bg-blue-500' },
-                            { label: 'Other', icon: ShoppingCart, color: 'bg-slate-500' },
-                        ].map((item, idx) => {
-                            const modeData = stats.dayReport?.breakdown?.find(b => b._id === item.label);
-                            const value = modeData ? modeData.total : 0;
-                            return (
-                                <div key={idx} className="flex items-center justify-between p-4 md:p-5 bg-[var(--input)] rounded-2xl border border-[var(--border)] hover:border-primary/30 transition-all group">
-                                    <div className="flex items-center gap-3 md:gap-4">
-                                        <div className={`p-2 md:p-2.5 rounded-xl ${item.color} text-white shadow-sm transition-transform group-hover:rotate-6`}>
-                                            <item.icon size={18} md:size={20} />
-                                        </div>
-                                        <span className="font-black text-[var(--foreground)] uppercase text-[10px] md:text-xs tracking-wider">{item.label}</span>
-                                    </div>
-                                    <span className="font-black text-primary text-base md:text-lg">₹{value.toLocaleString()}</span>
-                                </div>
-                            );
-                        })}
+                    <div className="flex items-center justify-between mb-6 md:mb-8">
+                        <h3 className="text-base md:text-lg font-black text-[var(--foreground)] uppercase tracking-tight font-sans flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-rose-500"></span>
+                            Expiry Alerts
+                        </h3>
+                        <Link to="/products" className="text-[var(--secondary)] hover:text-primary transition-colors text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
+                            View All <ChevronRight size={14} />
+                        </Link>
+                    </div>
+                    <div className="overflow-x-auto -mx-2 px-2 custom-scrollbar">
+                        <table className="w-full text-left min-w-[400px]">
+                            <thead className="text-[var(--muted)] text-[9px] md:text-[10px] font-black uppercase tracking-widest">
+                                <tr>
+                                    <th className="pb-4 border-b border-[var(--border)]">Product</th>
+                                    <th className="pb-4 border-b border-[var(--border)]">Category</th>
+                                    <th className="pb-4 border-b border-[var(--border)] text-right">Expiry</th>
+                                </tr>
+                            </thead>
+                            <tbody className="font-bold">
+                                {expiringProducts.slice(0, 5).map((product, idx) => (
+                                    <tr key={idx} className="group hover:bg-[var(--input)] transition-all">
+                                        <td className="py-4 md:py-5">
+                                            <div className="text-[var(--foreground)] text-xs md:text-sm">{product.name}</div>
+                                            <div className="text-[var(--muted)] text-[10px] font-medium">Stock: {product.stockQuantity}</div>
+                                        </td>
+                                        <td className="py-4 md:py-5">
+                                            <span className="px-2 py-0.5 rounded-md bg-[var(--input)] text-[var(--muted)] text-[8px] md:text-[10px] font-black uppercase tracking-wider border border-[var(--border)]">
+                                                {product.category}
+                                            </span>
+                                        </td>
+                                        <td className="py-4 md:py-5 text-rose-500 text-right text-xs md:text-sm">
+                                            {new Date(product.expiryDate).toLocaleDateString()}
+                                        </td>
+                                    </tr>
+                                ))}
+                                {(!expiringProducts || expiringProducts.length === 0) && (
+                                    <tr>
+                                        <td colSpan="3" className="py-12 md:py-16 text-center text-[var(--muted)] italic text-sm">No expiry alerts</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-                <div className="glass-card p-6 md:p-8">
+
+                <div className="glass-card p-6 rounded-[8px] md:p-8">
                     <h3 className="text-base md:text-lg font-black text-[var(--foreground)] mb-6 md:mb-8 uppercase tracking-tight font-sans">Top Selling Items</h3>
                     <div className="overflow-x-auto -mx-2 px-2 custom-scrollbar">
                         <table className="w-full text-left min-w-[400px]">
@@ -148,6 +175,65 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Action Buttons Section */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Link
+                    to="/products"
+                    className="glass-card p-6 flex items-center justify-between group hover:border-primary transition-all duration-300 bg-gradient-to-r from-[var(--card)] to-[var(--input)]"
+                >
+                    <div className="flex items-center gap-4">
+                        <div className="p-3 rounded-2xl bg-primary/10 text-primary transition-transform group-hover:scale-110">
+                            <Package size={24} />
+                        </div>
+                        <div>
+                            <h4 className="font-black text-[var(--foreground)] uppercase tracking-tight">products</h4>
+                            <p className="text-[var(--muted)] text-[10px] font-bold uppercase tracking-widest mt-0.5">Add, edit and track all products</p>
+                        </div>
+                    </div>
+                    <div className="p-2 rounded-xl bg-[var(--input)] text-[var(--muted)] transition-all group-hover:bg-primary group-hover:text-white group-hover:translate-x-1">
+                        <ArrowRight size={20} />
+                    </div>
+                </Link>
+
+                <Link
+                    to="/analytics"
+                    className="glass-card p-6 flex items-center justify-between group hover:border-violet-500 transition-all duration-300 bg-gradient-to-r from-[var(--card)] to-[var(--input)]"
+                >
+                    <div className="flex items-center gap-4">
+                        <div className="p-3 rounded-2xl bg-violet-500/10 text-violet-500 transition-transform group-hover:scale-110">
+                            <Layers size={24} />
+                        </div>
+                        <div>
+                            <h4 className="font-black text-[var(--foreground)] uppercase tracking-tight">Detailed Analytics</h4>
+                            <p className="text-[var(--muted)] text-[10px] font-bold uppercase tracking-widest mt-0.5">Explore sales trends and reports</p>
+                        </div>
+                    </div>
+                    <div className="p-2 rounded-xl bg-[var(--input)] text-[var(--muted)] transition-all group-hover:bg-violet-500 group-hover:text-white group-hover:translate-x-1">
+                        <ArrowRight size={20} />
+                    </div>
+                </Link>
+
+                <Link
+                    to="/transactions"
+                    className="glass-card p-6 flex items-center justify-between group hover:border-emerald-500 transition-all duration-300 bg-gradient-to-r from-[var(--card)] to-[var(--input)]"
+                >
+                    <div className="flex items-center gap-4">
+                        <div className="p-3 rounded-2xl bg-emerald-500/10 text-emerald-500 transition-transform group-hover:scale-110">
+                            <History size={24} />
+                        </div>
+                        <div>
+                            <h4 className="font-black text-[var(--foreground)] uppercase tracking-tight">Recent Transactions</h4>
+                            <p className="text-[var(--muted)] text-[10px] font-bold uppercase tracking-widest mt-0.5">View and manage past invoices</p>
+                        </div>
+                    </div>
+                    <div className="p-2 rounded-xl bg-[var(--input)] text-[var(--muted)] transition-all group-hover:bg-emerald-500 group-hover:text-white group-hover:translate-x-1">
+                        <ArrowRight size={20} />
+                    </div>
+                </Link>
+            </div>
+
+
 
             {/* Expiry Modal */}
             {showExpiryModal && (

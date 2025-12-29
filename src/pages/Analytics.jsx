@@ -79,7 +79,7 @@ const Analytics = () => {
             </div>
 
             {/* Filters Row */}
-            <div className="bg-[var(--card)] p-6 rounded-[32px] border border-[var(--border)] shadow-sm grid grid-cols-1 md:grid-cols-3 gap-6 transition-colors duration-300">
+            <div className="bg-[var(--card)] p-6 rounded-[8px] border border-[var(--border)] shadow-sm grid grid-cols-1 md:grid-cols-3 gap-6 transition-colors duration-300">
                 <div className="space-y-2">
                     <label className="text-[10px] font-black text-[var(--muted)] uppercase tracking-widest ml-1">Start Date</label>
                     <div className="relative">
@@ -119,7 +119,7 @@ const Analytics = () => {
                     { label: 'Net Profit', val: `₹${data.range.netProfit?.toLocaleString() || '0'}`, icon: TrendingUp, color: 'bg-blue-500' },
                     { label: 'Total Invoices', val: data.range.count, icon: Calendar, color: 'bg-violet-500' },
                 ].map((stat, i) => (
-                    <div key={i} className="bg-[var(--card)] p-6 rounded-[32px] border border-[var(--border)] shadow-sm flex items-center justify-between group hover:shadow-xl transition-all duration-500">
+                    <div key={i} className="bg-[var(--card)] p-6 rounded-[8px] border border-[var(--border)] shadow-sm flex items-center justify-between group hover:shadow-xl transition-all duration-500">
                         <div className="space-y-1">
                             <p className="text-[10px] font-black text-[var(--muted)] uppercase tracking-widest">{stat.label}</p>
                             <p className="text-2xl font-black text-[var(--foreground)]">{stat.val}</p>
@@ -132,7 +132,7 @@ const Analytics = () => {
             </div>
 
             {/* Daily Report Breakdown */}
-            <div className="bg-[var(--card)] rounded-[32px] border-2 border-primary/20 p-8 shadow-sm transition-colors duration-300">
+            <div className="bg-[var(--card)] rounded-[8px] border-2 border-primary/20 p-8 shadow-sm transition-colors duration-300">
                 <div className="flex items-center justify-between mb-8">
                     <h3 className="text-[14px] font-black text-[var(--foreground)] tracking-tight">Day Sales Report ({new Date(data.dayReport.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })})</h3>
                     <div className="flex gap-4">
@@ -164,7 +164,7 @@ const Analytics = () => {
             </div>
 
             {/* Sales Trend Chart */}
-            <div className="bg-[var(--card)] p-8 rounded-[40px] border border-[var(--border)] shadow-sm min-h-[400px]">
+            <div className="bg-[var(--card)] p-8 rounded-[8px] border border-[var(--border)] shadow-sm min-h-[400px]">
                 <div className="flex items-center justify-between mb-10">
                     <div>
                         <h3 className="text-lg font-black text-[var(--foreground)] tracking-tight">Financial Trends</h3>
@@ -199,7 +199,7 @@ const Analytics = () => {
             </div>
 
             {/* Recent Expenses List */}
-            <div className="bg-[var(--card)] rounded-[40px] border border-[var(--border)] shadow-sm overflow-hidden flex flex-col">
+            <div className="bg-[var(--card)] rounded-[8px] border border-[var(--border)] shadow-sm overflow-hidden flex flex-col">
                 <div className="p-8 border-b border-[var(--border)] flex items-center justify-between">
                     <div>
                         <h3 className="text-lg font-black text-[var(--foreground)] tracking-tight uppercase">Recent Expenses</h3>
@@ -247,7 +247,7 @@ const Analytics = () => {
             {/* Expense Modal */}
             {showExpenseModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-300">
-                    <div className="bg-[var(--card)] w-full max-w-lg rounded-[32px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 border border-[var(--border)] transition-colors duration-300">
+                    <div className="bg-[var(--card)] w-full max-w-lg rounded-[8px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 border border-[var(--border)] transition-colors duration-300">
                         <div className="px-8 py-6 border-b border-[var(--border)] flex items-center justify-between bg-[var(--card)] z-10">
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-rose-500/10 text-rose-500 rounded-xl">

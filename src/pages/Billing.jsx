@@ -8,6 +8,7 @@ const Billing = () => {
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([]);
     const [customer, setCustomer] = useState('');
+    const [phone, setPhone] = useState('');
     const [discount, setDiscount] = useState(0);
     const [paymentMode, setPaymentMode] = useState('Cash');
     const [currentPage, setCurrentPage] = useState(1);
@@ -84,9 +85,21 @@ const Billing = () => {
 
     const handleCheckout = async (shouldPrint = false) => {
         if (cart.length === 0) return;
+
+        // Validation for Phone Number
+        if (!phone) {
+            toast.error('Customer phone number is required');
+            return;
+        }
+        if (!/^\d{10}$/.test(phone)) {
+            toast.error('Please enter a valid 10-digit phone number');
+            return;
+        }
+
         try {
             const billData = {
                 customerName: customer,
+                customerPhone: phone,
                 items: cart,
                 totalAmount: subTotal,
                 gstAmount: totalGst,
@@ -103,6 +116,7 @@ const Billing = () => {
 
             setCart([]);
             setCustomer('');
+            setPhone('');
             setDiscount(0);
             setPaymentMode('Cash');
         } catch (error) {
@@ -159,7 +173,12 @@ const Billing = () => {
                     <div class="header text-center">
                         <div class="restaurant-name">${storeName}</div>
                         <div style="white-space: pre-line;">${storeAddress}</div>
-                        <div>Ph: ${storePhone}</div>
+                        <div>Store Ph: ${storePhone}</div>
+                        <div class="divider" style="margin: 5px 0;"></div>
+                        <div style="text-align: left; font-size: 10px;">
+                            <div>Customer: ${bill.customerName || 'Walk-in'}</div>
+                            <div>Phone: ${bill.customerPhone}</div>
+                        </div>
                     </div>
                     
                     <div class="divider"></div>
@@ -172,7 +191,7 @@ const Billing = () => {
                     </div>
                     <div class="info-row">
                         <span>Date: ${new Date(bill.createdAt).toLocaleDateString()}</span>
-                        <span>Type: Dine In</span>
+                     
                     </div>
 
                     <div class="divider"></div>
@@ -264,7 +283,7 @@ const Billing = () => {
                     </div>
                 </div>
 
-                <div className="bg-[var(--card)] rounded-[20px] md:rounded-[24px] border border-[var(--border)] shadow-sm overflow-hidden transition-colors duration-300">
+                <div className="bg-[var(--card)] rounded-[8px] border border-[var(--border)] shadow-sm overflow-hidden transition-colors duration-300">
                     <div className="overflow-x-auto custom-scrollbar px-1">
                         <table className="w-full text-left border-collapse min-w-[500px]">
                             <thead className="sticky top-0 z-10 bg-[var(--input)] shadow-[0_1px_0_0_rgba(0,0,0,0.05)]">
@@ -299,7 +318,7 @@ const Billing = () => {
                                         <td className="px-2 md:px-6 py-2.5 md:py-3 text-right">
                                             <button
                                                 onClick={() => addToCart(p)}
-                                                className="px-2 py-1.5 md:px-4 md:py-2 bg-[var(--foreground)] text-[var(--background)] font-black rounded-lg md:rounded-xl hover:bg-primary transition-all shadow-sm inline-flex items-center gap-1.5 md:gap-2 text-[8px] md:text-[10px] uppercase tracking-widest active:scale-95 whitespace-nowrap"
+                                                className="px-2 py-1.5 md:px-4 md:py-2 bg-gray-400 text-[var(--background)] font-black rounded-lg md:rounded-xl hover:bg-primary transition-all shadow-sm inline-flex items-center gap-1.5 md:gap-2 text-[8px] md:text-[10px] uppercase tracking-widest active:scale-95 whitespace-nowrap"
                                             >
                                                 <Plus size={12} md:size={14} />
                                                 Add
@@ -349,7 +368,7 @@ const Billing = () => {
             </div>
 
             {/* Cart & Checkout */}
-            <div className="col-span-12 lg:col-span-4 bg-[var(--card)] border border-[var(--border)] rounded-[20px] md:rounded-[32px] p-4 md:p-6 flex flex-col transition-colors duration-300">
+            <div className="col-span-12 lg:col-span-4 bg-[var(--card)] border border-[var(--border)] rounded-[8px] p-4 md:p-6 flex flex-col transition-colors duration-300">
                 <h2 className="text-xl font-bold mb-6 flex items-center gap-2 text-[var(--foreground)]">
                     <ShoppingCart className="text-primary" size={24} />
                     Current Bill
@@ -364,6 +383,21 @@ const Billing = () => {
                             className="w-full bg-[var(--input)] border border-[var(--border)] rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 text-[var(--foreground)] font-medium transition-all placeholder:text-[var(--muted)]"
                             value={customer}
                             onChange={(e) => setCustomer(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-xs font-black text-[var(--muted)] uppercase tracking-widest ml-1">Phone Number <span className="text-rose-500">*</span></label>
+                        <input
+                            type="text"
+                            maxLength="10"
+                            placeholder="10-digit Phone Number"
+                            className="w-full bg-[var(--input)] border border-[var(--border)] rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 text-[var(--foreground)] font-bold transition-all placeholder:text-[var(--muted)]"
+                            value={phone}
+                            onChange={(e) => {
+                                const val = e.target.value.replace(/\D/g, '');
+                                setPhone(val);
+                            }}
                         />
                     </div>
 

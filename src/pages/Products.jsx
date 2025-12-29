@@ -220,7 +220,7 @@ const Products = () => {
             </div>
 
             {/* Products Table */}
-            <div className="bg-[var(--card)] rounded-[24px] md:rounded-[32px] border border-[var(--border)] shadow-sm overflow-hidden flex-1 flex flex-col min-h-0 mb-6 transition-colors duration-300">
+            <div className="bg-[var(--card)] rounded-[8px] border border-[var(--border)] shadow-sm overflow-hidden flex-1 flex flex-col min-h-0 mb-6 transition-colors duration-300">
                 <div className="overflow-x-auto custom-scrollbar flex-1">
                     <table className="w-full text-left border-collapse min-w-[650px]">
                         <thead className="sticky top-0 z-10 bg-[var(--input)] border-b border-[var(--border)] shadow-sm">

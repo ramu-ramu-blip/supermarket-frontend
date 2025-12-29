@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Search, Bell, User, Sun, Moon, Menu, X } from 'lucide-react';
+import { Bell, User, Sun, Moon, Menu, X, Zap } from 'lucide-react';
+
+
+import { Link } from 'react-router-dom';
+
 import ProfileModal from './ProfileModal';
 
 const Navbar = ({ onToggleTheme, theme, onToggleSidebar, isSidebarOpen }) => {
@@ -21,18 +25,21 @@ const Navbar = ({ onToggleTheme, theme, onToggleSidebar, isSidebarOpen }) => {
                     {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
                 </button>
 
-                <div className="relative w-48 md:w-96 hidden sm:block">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)] w-4 h-4" />
-                    <input
-                        type="text"
-                        placeholder="Search anything..."
-                        className="w-full bg-[var(--input)] border border-[var(--border)] rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-[var(--foreground)] placeholder:text-[var(--muted)]"
-                    />
-                </div>
+
             </div>
 
             <div className="flex items-center gap-3 md:gap-6">
+                {/* Quick Billing Button */}
+                <Link
+                    to="/billing"
+                    className="flex justify-center items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white hover:bg-primary/90 transition-all active:scale-95 shadow-lg shadow-primary/20 font-bold text-sm"
+                >
+                    <Zap size={18} fill="currentColor" />
+                    <span className="hidden lg:block whitespace-nowrap uppercase tracking-wider">Quick Billing</span>
+                </Link>
+
                 {/* Theme Toggle */}
+
                 <button
                     onClick={onToggleTheme}
                     className="p-2.5 rounded-xl bg-[var(--input)] border border-[var(--border)] text-[var(--secondary)] hover:text-primary hover:border-primary transition-all active:scale-95"

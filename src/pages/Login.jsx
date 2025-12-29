@@ -1,262 +1,206 @@
-// import { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import { ShoppingBag, Mail, Lock, Loader2, ArrowRight } from 'lucide-react';
-// import api from '../services/api';
-
-// const Login = () => {
-//     const [email, setEmail] = useState('');
-//     const [password, setPassword] = useState('');
-//     const [loading, setLoading] = useState(false);
-//     const [error, setError] = useState('');
-//     const navigate = useNavigate();
-
-//     const handleSubmit = async (e) => {
-//         e.preventDefault();
-//         setLoading(true);
-//         setError('');
-//         try {
-//             const { data } = await api.post('/auth/login', { email, password });
-//             localStorage.setItem('token', data.token);
-//             window.location.href = '/'; // Refresh to trigger layout change
-//         } catch (err) {
-//             setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
-
-//     return (
-//         <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6 relative overflow-hidden">
-//             {/* Soft decorative gradients */}
-//             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-//                 <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full"></div>
-//                 <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-blue-100/50 blur-[120px] rounded-full"></div>
-//             </div>
-
-//             <div className="w-full max-w-md animate-in fade-in zoom-in duration-500 relative z-10">
-//                 <div className="text-center mb-10">
-//                     <div className="inline-flex p-4 bg-white rounded-3xl shadow-xl shadow-primary/10 border border-slate-100 mb-6">
-//                         <ShoppingBag className="text-primary w-10 h-10" />
-//                     </div>
-//                     <h1 className="text-4xl font-black tracking-tight text-slate-900 mb-2">Welcome Back</h1>
-//                     <p className="text-slate-500 font-medium">Supermarket Billing System Admin Portal</p>
-//                 </div>
-
-//                 <div className="glass-card p-8 bg-white border border-slate-200 shadow-2xl shadow-slate-200/50">
-//                     <form onSubmit={handleSubmit} className="space-y-6">
-//                         {error && (
-//                             <div className="p-4 bg-red-50 border border-red-100 text-red-600 text-sm rounded-2xl text-center font-bold">
-//                                 {error}
-//                             </div>
-//                         )}
-
-//                         <div className="space-y-2">
-//                             <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
-//                             <div className="relative group">
-//                                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={20} />
-//                                 <input
-//                                     type="email"
-//                                     required
-//                                     className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 pl-12 pr-4 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-400 font-medium"
-//                                     placeholder="admin@superbill.com"
-//                                     value={email}
-//                                     onChange={(e) => setEmail(e.target.value)}
-//                                 />
-//                             </div>
-//                         </div>
-
-//                         <div className="space-y-2">
-//                             <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Password</label>
-//                             <div className="relative group">
-//                                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={20} />
-//                                 <input
-//                                     type="password"
-//                                     required
-//                                     className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 pl-12 pr-4 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-400 font-medium"
-//                                     placeholder="••••••••"
-//                                     value={password}
-//                                     onChange={(e) => setPassword(e.target.value)}
-//                                 />
-//                             </div>
-//                         </div>
-
-//                         <button
-//                             type="submit"
-//                             disabled={loading}
-//                             className="w-full py-4 bg-primary text-white font-black rounded-2xl hover:bg-primary/90 active:scale-[0.98] disabled:opacity-50 transition-all flex items-center justify-center gap-2 text-lg shadow-xl shadow-primary/30"
-//                         >
-//                             {loading ? (
-//                                 <Loader2 className="animate-spin" />
-//                             ) : (
-//                                 <>
-//                                     Sign In
-//                                     <ArrowRight size={20} />
-//                                 </>
-//                             )}
-//                         </button>
-//                     </form>
-//                 </div>
-
-//                 <p className="text-center mt-8 text-slate-500 text-sm font-medium">
-//                     Don't have an account? <span className="text-primary font-black cursor-pointer hover:underline">Contact System Admin</span>
-//                 </p>
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default Login;
-
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ShoppingBag, Mail, Lock, Loader2, ArrowRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import {
+    ShoppingBag,
+    Mail,
+    Lock,
+    Loader2,
+    ArrowRight,
+    Eye,
+    EyeOff,
+    Sun,
+    Moon
+} from 'lucide-react';
 import api from '../services/api';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const navigate = useNavigate();
+    const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+
+    useEffect(() => {
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+        localStorage.setItem('theme', theme);
+    }, [theme]);
+
+    const toggleTheme = () => {
+        setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError('');
+
         try {
             const { data } = await api.post('/auth/login', { email, password });
             localStorage.setItem('token', data.token);
-            window.location.href = '/dashboard'; // Refresh to trigger layout change
+            localStorage.setItem('userInfo', JSON.stringify(data));
+            window.location.href = '/dashboard';
         } catch (err) {
-            setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
+            setError(
+                err.response?.data?.message ||
+                'Login failed. Please check your credentials.'
+            );
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-[var(--background)] p-6 transition-colors duration-300">
-            <div className="w-full max-w-6xl bg-[var(--card)] rounded-3xl shadow-2xl shadow-black/5 overflow-hidden border border-[var(--border)] transition-colors duration-300">
-                <div className="grid grid-cols-1 lg:grid-cols-2">
+        <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-[var(--background)] transition-colors duration-300">
 
-                    {/* Left Card - Supermarket Photo */}
-                    <div className="relative bg-gradient-to-br from-emerald-600 to-emerald-800 p-10 min-h-[500px] lg:min-h-[600px]">
-                        {/* Overlay for better text visibility */}
-                        <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent"></div>
+            {/* Theme Toggle — Floating */}
+            <div className="absolute top-6 right-6 z-50">
+                <button
+                    onClick={toggleTheme}
+                    className="p-3 rounded-2xl bg-[var(--card)] border border-[var(--border)] text-[var(--secondary)] hover:text-primary hover:border-primary transition-all active:scale-95 shadow-lg"
+                    title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+                >
+                    {theme === 'light' ? <Moon size={22} /> : <Sun size={22} />}
+                </button>
+            </div>
 
-                        {/* Content */}
-                        <div className="relative z-10 h-full flex flex-col justify-between">
-                            <div>
-                                <div className="flex items-center gap-3 mb-8">
-                                    <div className="p-3 bg-white/20 backdrop-blur-sm rounded-2xl">
-                                        <ShoppingBag className="text-white w-8 h-8" />
-                                    </div>
-                                    <h2 className="text-2xl font-black text-white">SuperMarket Pro</h2>
-                                </div>
+            {/* LEFT — IMAGE + PROMO (DESKTOP ONLY) */}
+            <div className="relative hidden lg:block overflow-hidden">
+                <img
+                    src="/super1.jpeg"
+                    alt="Supermarket"
+                    className="absolute inset-0 w-full h-full object-cover scale-105"
+                />
 
-                                <h1 className="text-4xl md:text-5xl font-black text-white leading-tight mb-4">
-                                    Smart Billing, <br />
-                                    <span className="text-emerald-200">Modern Retail</span>
-                                </h1>
+                {/* Green overlay */}
 
-                                <p className="text-emerald-100/80 text-lg font-medium">
-                                    Advanced inventory management and billing system for modern supermarkets
-                                </p>
+
+                {/* Content */}
+                <div className="relative z-10 p-12 text-white h-full flex flex-col justify-center">
+                    <div className="flex items-center gap-3 mb-8">
+                        <img src="/logo.png" alt="Logo" className="h-20 w-auto object-contain drop-shadow-xl" />
+                        <p className="text-2xl font-black tracking-tighter uppercase">Fresh<span className="text-white/70">Mart</span></p>
+                    </div>
+
+                    <h1 className="text-6xl font-black leading-tight mb-6 tracking-tighter">
+                        SMART RETAIL <br />
+                        <span className="text-white/60">MANAGEMENT</span>
+                    </h1>
+
+                    <p className="text-xl text-white/80 mb-10 max-w-md font-medium leading-relaxed">
+                        Effortless inventory, lightning-fast billing, and insightful analytics for your modern supermarket.
+                    </p>
+
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-4 bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 w-fit">
+                            <div className="bg-white/20 p-2 rounded-lg">%</div>
+                            <span className="font-bold tracking-wide uppercase text-sm">Real-time Performance Metrics</span>
+                        </div>
+                        <div className="flex items-center gap-4 bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 w-fit">
+                            <div className="bg-white/20 p-2 rounded-lg">⚡</div>
+                            <span className="font-bold tracking-wide uppercase text-sm">One-Click Invoice Generation</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* RIGHT — LOGIN CARD */}
+            <div className="flex items-center justify-center p-8 bg-gradient-to-br from-[var(--background)] to-[var(--input)]/20">
+                <div className="w-full max-w-md bg-[var(--card)] rounded-[40px] shadow-2xl shadow-black/5 p-12 border border-[var(--border)] transition-all duration-500">
+
+                    {/* Branding for Mobile */}
+                    <div className="lg:hidden flex justify-center mb-8">
+                        <div className="flex items-center gap-3">
+                            <div className="bg-primary p-2.5 rounded-xl shadow-lg shadow-primary/20">
+                                <ShoppingBag className="text-white w-6 h-6" />
                             </div>
-
-                            {/* Features List */}
-                            <div className="space-y-3">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-2 h-2 bg-emerald-300 rounded-full"></div>
-                                    <span className="text-white font-medium">Real-time Sales Analytics</span>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <div className="w-2 h-2 bg-emerald-300 rounded-full"></div>
-                                    <span className="text-white font-medium">Inventory Management</span>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <div className="w-2 h-2 bg-emerald-300 rounded-full"></div>
-                                    <span className="text-white font-medium">Fast Checkout System</span>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <div className="w-2 h-2 bg-emerald-300 rounded-full"></div>
-                                    <span className="text-white font-medium">Secure Admin Portal</span>
-                                </div>
-                            </div>
+                            <span className="text-xl font-black tracking-tighter text-[var(--foreground)] uppercase italic">Super<span className="text-primary not-italic">Pro</span></span>
                         </div>
                     </div>
 
-                    {/* Right Card - Login Form */}
-                    <div className="p-10">
-                        <div className="max-w-md mx-auto">
-                            <div className="text-center mb-10">
-                                <div className="inline-flex p-4 bg-[var(--card)] rounded-3xl shadow-xl shadow-primary/10 border border-[var(--border)] mb-6">
-                                    <ShoppingBag className="text-primary w-10 h-10" />
-                                </div>
-                                <h1 className="text-4xl font-black tracking-tight text-[var(--foreground)] mb-2">Welcome Back</h1>
-                                <p className="text-[var(--muted)] font-medium">Supermarket Billing System Admin Portal</p>
-                            </div>
-
-                            <div className="p-8 bg-[var(--card)] border border-[var(--border)] shadow-2xl shadow-black/5 rounded-3xl">
-                                <form onSubmit={handleSubmit} className="space-y-6">
-                                    {error && (
-                                        <div className="p-4 bg-red-50 border border-red-100 text-red-600 text-sm rounded-2xl text-center font-bold">
-                                            {error}
-                                        </div>
-                                    )}
-
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-black text-[var(--muted)] uppercase tracking-widest ml-1">Email Address</label>
-                                        <div className="relative group">
-                                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-primary transition-colors" size={20} />
-                                            <input
-                                                type="email"
-                                                required
-                                                className="w-full bg-[var(--input)] border border-[var(--border)] rounded-2xl py-4 pl-12 pr-4 text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-[var(--muted)] font-medium"
-                                                placeholder="admin@superbill.com"
-                                                value={email}
-                                                onChange={(e) => setEmail(e.target.value)}
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-black text-[var(--muted)] uppercase tracking-widest ml-1">Password</label>
-                                        <div className="relative group">
-                                            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-primary transition-colors" size={20} />
-                                            <input
-                                                type="password"
-                                                required
-                                                className="w-full bg-[var(--input)] border border-[var(--border)] rounded-2xl py-4 pl-12 pr-4 text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-[var(--muted)] font-medium"
-                                                placeholder="••••••••"
-                                                value={password}
-                                                onChange={(e) => setPassword(e.target.value)}
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <button
-                                        type="submit"
-                                        disabled={loading}
-                                        className="w-full py-4 bg-primary text-white font-black rounded-2xl hover:bg-primary/90 active:scale-[0.98] disabled:opacity-50 transition-all flex items-center justify-center gap-2 text-lg shadow-xl shadow-primary/30"
-                                    >
-                                        {loading ? (
-                                            <Loader2 className="animate-spin" />
-                                        ) : (
-                                            <>
-                                                Sign In
-                                                <ArrowRight size={20} />
-                                            </>
-                                        )}
-                                    </button>
-                                </form>
-                            </div>
-
-                            <p className="text-center mt-8 text-[var(--muted)] text-sm font-medium">
-                                Don't have an account? <span className="text-primary font-black cursor-pointer hover:underline">Contact System Admin</span>
-                            </p>
-                        </div>
+                    <div className="flex flex-col mb-10 ">
+                        <h2 className="text-4xl font-black text-[var(--foreground)] tracking-tighter mb-2">
+                            Welcome Back
+                        </h2>
+                        <p className="text-[var(--muted)] font-bold text-sm uppercase tracking-widest">
+                            Authorized Access Only
+                        </p>
                     </div>
+
+                    <form onSubmit={handleSubmit} className="space-y-8">
+
+                        {error && (
+                            <div className="bg-rose-500/10 border border-rose-500/20 text-rose-500 text-xs p-4 rounded-2xl text-center font-bold uppercase tracking-widest animate-in shake duration-300">
+                                {error}
+                            </div>
+                        )}
+
+                        {/* EMAIL */}
+                        <div className="space-y-3">
+                            <label className="text-[10px] font-black text-[var(--muted)] uppercase tracking-widest ml-1">
+                                Email Address
+                            </label>
+                            <div className="relative group">
+                                <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-primary transition-colors duration-300" size={18} />
+                                <input
+                                    type="email"
+                                    required
+                                    placeholder="your@email.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="w-full rounded-[20px] border border-[var(--border)] bg-[var(--input)] py-4 pl-14 pr-4 font-bold text-[var(--foreground)] focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary/50 transition-all placeholder:text-[var(--muted)]/50 text-sm"
+                                />
+                            </div>
+                        </div>
+
+                        {/* PASSWORD */}
+                        <div className="space-y-3">
+                            <label className="text-[10px] font-black text-[var(--muted)] uppercase tracking-widest ml-1">
+                                Secure Password
+                            </label>
+                            <div className="relative group">
+                                <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-primary transition-colors duration-300" size={18} />
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    required
+                                    placeholder="••••••••"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="w-full rounded-[20px] border border-[var(--border)] bg-[var(--input)] py-4 pl-14 pr-14 font-bold text-[var(--foreground)] focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary/50 transition-all placeholder:text-[var(--muted)]/50 text-sm"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-5 top-1/2 -translate-y-1/2 text-[var(--muted)] hover:text-primary transition-colors p-1"
+                                >
+                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
+                            </div>
+                        </div>
+
+
+
+                        {/* BUTTON */}
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full bg-primary text-white font-black py-4 rounded-[22px] flex items-center justify-center gap-3 transition-all active:scale-95 shadow-xl shadow-primary/25 hover:shadow-primary/35 disabled:opacity-50 disabled:scale-100 mt-4 uppercase tracking-[0.2em] text-xs"
+                        >
+                            {loading ? (
+                                <Loader2 className="animate-spin" size={20} />
+                            ) : (
+                                <>
+                                    <span>Sign In to Terminal</span>
+                                    <ArrowRight size={18} strokeWidth={3} />
+                                </>
+                            )}
+                        </button>
+                    </form>
+
+
                 </div>
             </div>
         </div>
