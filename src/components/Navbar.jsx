@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 import ProfileModal from './ProfileModal';
 
-const Navbar = ({ onToggleTheme, theme, onToggleSidebar, isSidebarOpen }) => {
+const Navbar = ({ onToggleSidebar, isSidebarOpen }) => {
     const [showProfileModal, setShowProfileModal] = useState(false);
     const [userInfo, setUserInfo] = useState({});
 
@@ -20,7 +20,7 @@ const Navbar = ({ onToggleTheme, theme, onToggleSidebar, isSidebarOpen }) => {
                 {/* Mobile Menu Toggle */}
                 <button
                     onClick={onToggleSidebar}
-                    className="p-2.5 rounded-xl bg-[var(--input)] border border-[var(--border)] text-[var(--secondary)] hover:text-primary hover:border-primary transition-all active:scale-95 lg:hidden"
+                    className="p-2.5 rounded-xl bg-(--input) border border-(--border) text-(--muted) hover:text-primary hover:border-primary transition-all active:scale-95 lg:hidden"
                 >
                     {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
                 </button>
@@ -32,32 +32,24 @@ const Navbar = ({ onToggleTheme, theme, onToggleSidebar, isSidebarOpen }) => {
                 {/* Quick Billing Button */}
                 <Link
                     to="/billing"
-                    className="flex justify-center items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white hover:bg-primary/90 transition-all active:scale-95 shadow-lg shadow-primary/20 font-bold text-sm"
+                    className="flex justify-center items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-(--primary-foreground) hover:bg-primary/90 transition-all active:scale-95 shadow-lg shadow-primary/20 font-bold text-sm"
                 >
                     <Zap size={18} fill="currentColor" />
                     <span className="hidden lg:block whitespace-nowrap uppercase tracking-wider">Quick Billing</span>
                 </Link>
 
-                {/* Theme Toggle */}
-
-                <button
-                    onClick={onToggleTheme}
-                    className="p-2.5 rounded-xl bg-[var(--input)] border border-[var(--border)] text-[var(--secondary)] hover:text-primary hover:border-primary transition-all active:scale-95"
-                    title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
-                >
-                    {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
-                </button>
+                {/* Theme Toggle Removed */}
 
                 <button
                     onClick={() => setShowProfileModal(true)}
-                    className="flex items-center gap-3 md:gap-4 pl-3 md:pl-6 border-l border-[var(--border)] hover:bg-[var(--input)] transition-all rounded-r-xl md:rounded-l-xl p-2 cursor-pointer"
+                    className="flex items-center gap-3 pl-3 md:pl-4 pr-1.5 py-1.5 bg-(--card) border border-(--border) rounded-full hover:border-primary hover:shadow-md transition-all group ml-2"
                 >
                     <div className="text-right hidden md:block">
-                        <p className="text-sm font-bold text-[var(--foreground)] leading-none">{userInfo?.name || 'Admin User'}</p>
-                        <p className="text-xs text-[var(--muted)] font-medium mt-1 uppercase tracking-wide">{userInfo?.supermarketName || 'Store Manager'}</p>
+                        <p className="text-xs md:text-sm font-bold text-(--foreground) leading-none group-hover:text-primary transition-colors">{userInfo?.name || 'Admin User'}</p>
+                        <p className="text-[10px] text-(--muted) font-bold mt-0.5 uppercase tracking-wider">{userInfo?.supermarketName || 'Store Manager'}</p>
                     </div>
-                    <div className="w-10 h-10 rounded-full bg-[var(--input)] flex items-center justify-center border border-[var(--border)] text-[var(--secondary)] shadow-sm">
-                        <User size={20} />
+                    <div className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-(--input) flex items-center justify-center text-(--muted) group-hover:text-primary group-hover:bg-primary/10 transition-all">
+                        <User size={18} />
                     </div>
                 </button>
             </div>

@@ -53,83 +53,83 @@ const ProfileModal = ({ onClose, onUpdate }) => {
 
     return createPortal(
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-            <div className="bg-[var(--card)] w-full max-w-lg rounded-[8px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 max-h-[90vh] flex flex-col border border-[var(--border)] transition-colors duration-300">
-                <div className="px-8 py-5 border-b border-[var(--border)] flex items-center justify-between bg-[var(--card)] flex-shrink-0 transition-colors duration-300">
-                    <h2 className="text-xl font-black text-[var(--foreground)] tracking-tight flex items-center gap-3 transition-colors duration-300">
+            <div className="bg-(--card) w-full max-w-lg rounded-[8px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 max-h-[90vh] flex flex-col border border-(--border) transition-colors duration-300">
+                <div className="px-8 py-5 border-b border-(--border) flex items-center justify-between bg-(--card) flex-shrink-0 transition-colors duration-300">
+                    <h2 className="text-xl font-black text-(--foreground) tracking-tight flex items-center gap-3 transition-colors duration-300">
                         <span className="p-2 bg-primary/10 text-primary rounded-xl"><User size={20} /></span>
                         Edit Profile
                     </h2>
-                    <button onClick={onClose} className="p-2 hover:bg-rose-500/10 hover:text-rose-500 rounded-xl transition-all text-[var(--muted)]">
+                    <button onClick={onClose} className="p-2 hover:bg-rose-500/10 hover:text-rose-500 rounded-xl transition-all text-(--muted)">
                         <X size={24} />
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto bg-[var(--background)] transition-colors duration-300">
+                <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto bg-(--background) transition-colors duration-300">
                     <div className="space-y-2">
-                        <label className="text-[10px] font-black text-[var(--muted)] uppercase tracking-widest ml-1 transition-colors duration-300">Store Name</label>
+                        <label className="text-[10px] font-black text-(--muted) uppercase tracking-widest ml-1 transition-colors duration-300">Store Name</label>
                         <div className="relative group">
-                            <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-primary transition-colors" size={18} />
+                            <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-(--muted) group-focus-within:text-primary transition-colors" size={18} />
                             <input
                                 type="text"
                                 name="supermarketName"
                                 value={formData.supermarketName}
                                 onChange={handleChange}
                                 placeholder="Enter Store Name"
-                                className="w-full bg-[var(--input)] border border-[var(--border)] rounded-2xl py-3.5 pl-12 pr-4 text-sm font-bold text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-[var(--muted)]"
+                                className="w-full bg-(--input) border border-(--border) rounded-2xl py-3.5 pl-12 pr-4 text-sm font-bold text-(--foreground) focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-(--muted)"
                             />
                         </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-5">
                         <div className="space-y-2">
-                            <label className="text-[10px] font-black text-[var(--muted)] uppercase tracking-widest ml-1 transition-colors duration-300">Full Name</label>
+                            <label className="text-[10px] font-black text-(--muted) uppercase tracking-widest ml-1 transition-colors duration-300">Full Name</label>
                             <div className="relative group">
-                                <TicketCheck className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-primary transition-colors" size={18} />
+                                <TicketCheck className="absolute left-4 top-1/2 -translate-y-1/2 text-(--muted) group-focus-within:text-primary transition-colors" size={18} />
                                 <input
                                     type="text"
                                     name="name"
                                     value={formData.name}
                                     onChange={handleChange}
-                                    className="w-full bg-[var(--input)] border border-[var(--border)] rounded-2xl py-3.5 pl-12 pr-4 text-sm font-bold text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                    className="w-full bg-(--input) border border-(--border) rounded-2xl py-3.5 pl-12 pr-4 text-sm font-bold text-(--foreground) focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                 />
                             </div>
                         </div>
                         <div className="space-y-2">
-                            <label className="text-[10px] font-black text-[var(--muted)] uppercase tracking-widest ml-1 transition-colors duration-300">Phone Number</label>
+                            <label className="text-[10px] font-black text-(--muted) uppercase tracking-widest ml-1 transition-colors duration-300">Phone Number</label>
                             <div className="relative group">
-                                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)] group-focus-within:text-primary transition-colors" size={18} />
+                                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-(--muted) group-focus-within:text-primary transition-colors" size={18} />
                                 <input
                                     type="text"
                                     name="phone"
                                     value={formData.phone}
                                     onChange={handleChange}
                                     placeholder="Contact No"
-                                    className="w-full bg-[var(--input)] border border-[var(--border)] rounded-2xl py-3.5 pl-12 pr-4 text-sm font-bold text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-[var(--muted)]"
+                                    className="w-full bg-(--input) border border-(--border) rounded-2xl py-3.5 pl-12 pr-4 text-sm font-bold text-(--foreground) focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-(--muted)"
                                 />
                             </div>
                         </div>
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-[10px] font-black text-[var(--muted)] uppercase tracking-widest ml-1 transition-colors duration-300">Address</label>
+                        <label className="text-[10px] font-black text-(--muted) uppercase tracking-widest ml-1 transition-colors duration-300">Address</label>
                         <div className="relative group">
-                            <MapPin className="absolute left-4 top-3.5 text-[var(--muted)] group-focus-within:text-primary transition-colors" size={18} />
+                            <MapPin className="absolute left-4 top-3.5 text-(--muted) group-focus-within:text-primary transition-colors" size={18} />
                             <textarea
                                 name="address"
                                 value={formData.address}
                                 onChange={handleChange}
                                 placeholder="Store Address"
                                 rows="2"
-                                className="w-full bg-[var(--input)] border border-[var(--border)] rounded-2xl py-3 pl-12 pr-4 text-sm font-bold text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-[var(--muted)] resize-none"
+                                className="w-full bg-(--input) border border-(--border) rounded-2xl py-3 pl-12 pr-4 text-sm font-bold text-(--foreground) focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-(--muted) resize-none"
                             />
                         </div>
                     </div>
 
-                    <div className="pt-4 border-t border-[var(--border)] mt-2">
+                    <div className="pt-4 border-t border-(--border) mt-2">
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-3.5 bg-[var(--foreground)] text-[var(--background)] font-black rounded-2xl hover:bg-[var(--foreground)]/90 active:scale-95 disabled:opacity-50 disabled:scale-100 transition-all flex items-center justify-center gap-2 shadow-xl shadow-black/10 uppercase tracking-widest text-xs"
+                            className="w-full py-3.5 bg-(--foreground) text-(--background) font-black rounded-2xl hover:bg-(--foreground)/90 active:scale-95 disabled:opacity-50 disabled:scale-100 transition-all flex items-center justify-center gap-2 shadow-xl shadow-black/10 uppercase tracking-widest text-xs"
                         >
                             {loading ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
                             Save Changes

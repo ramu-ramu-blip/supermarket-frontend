@@ -8,26 +8,16 @@ import Billing from '../pages/Billing';
 import Analytics from '../pages/Analytics';
 import Transactions from '../pages/Transactions';
 import Login from '../pages/Login';
+import Suppliers from '../pages/Suppliers';
 
 import Landing from '../pages/Landing';
 
 const MainLayout = () => {
     const isAuthenticated = !!localStorage.getItem('token');
-    const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+    // theme state removed
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-    useEffect(() => {
-        if (theme === 'dark') {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-        localStorage.setItem('theme', theme);
-    }, [theme]);
-
-    const toggleTheme = () => {
-        setTheme(prev => prev === 'light' ? 'dark' : 'light');
-    };
+    // Theme effect removed
 
     const toggleSidebar = () => {
         setIsSidebarOpen(prev => !prev);
@@ -42,7 +32,7 @@ const MainLayout = () => {
             <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
             <div className="flex-1 flex flex-col min-w-0 relative">
                 <div className="sticky top-0 z-30 border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur-md">
-                    <Navbar onToggleTheme={toggleTheme} theme={theme} onToggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
+                    <Navbar onToggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
                 </div>
                 <main className="flex-1 p-4 md:p-8 overflow-y-auto bg-[var(--background)]">
                     <Outlet />
@@ -83,6 +73,10 @@ const router = createBrowserRouter([
             {
                 path: '/transactions',
                 element: <Transactions />,
+            },
+            {
+                path: '/suppliers',
+                element: <Suppliers />,
             },
         ],
     },

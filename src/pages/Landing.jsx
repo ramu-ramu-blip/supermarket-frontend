@@ -23,12 +23,12 @@ const Landing = () => {
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <div className="p-2 bg-primary rounded-xl shadow-lg shadow-primary/20">
-                            <ShoppingBag className="text-white w-6 h-6" />
+                            <ShoppingBag className="text-[var(--primary-foreground)] w-6 h-6" />
                         </div>
                         <span className="text-xl font-black tracking-tighter text-[var(--foreground)] uppercase">SuperMarket<span className="text-primary">Pro</span></span>
                     </div>
                     <div className="flex items-center gap-4">
-                        <Link to="/login" className="px-6 py-2.5 bg-slate-900 text-white font-black rounded-xl hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/10 uppercase text-xs tracking-widest active:scale-95">
+                        <Link to="/login" className="px-6 py-2.5 bg-[var(--foreground)] text-[var(--background)] font-black rounded-xl hover:opacity-90 transition-all shadow-xl shadow-black/10 uppercase text-xs tracking-widest active:scale-95">
                             Get Started
                         </Link>
                     </div>
@@ -55,7 +55,7 @@ const Landing = () => {
                         The all-in-one POS and inventory system designed to make your supermarket faster, smarter, and more profitable.
                     </p>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-5 animate-in fade-in slide-in-from-bottom-16 duration-1000">
-                        <Link to="/login" className="px-12 py-6 bg-primary text-white font-black rounded-[28px] hover:bg-primary/90 transition-all shadow-2xl shadow-primary/30 flex items-center gap-3 uppercase text-sm tracking-widest active:scale-95">
+                        <Link to="/login" className="px-12 py-6 bg-primary text-[var(--primary-foreground)] font-black rounded-[28px] hover:bg-primary/90 transition-all shadow-2xl shadow-primary/30 flex items-center gap-3 uppercase text-sm tracking-widest active:scale-95">
                             Start Free Trial
                             <ArrowRight size={20} />
                         </Link>
@@ -81,7 +81,7 @@ const Landing = () => {
                             { step: "03", title: "Track Growth", desc: "Monitor sales trends, manage expenses, and see your net profit in real-time.", icon: BarChart3 }
                         ].map((item, i) => (
                             <div key={i} className="relative z-10 bg-[var(--card)] p-10 rounded-[40px] border border-[var(--border)] shadow-xl shadow-black/5 text-center group hover:-translate-y-2 transition-transform duration-500">
-                                <div className="w-20 h-20 bg-primary text-white rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-xl shadow-primary/20 group-hover:rotate-6 transition-all">
+                                <div className="w-20 h-20 bg-primary text-[var(--primary-foreground)] rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-xl shadow-primary/20 group-hover:rotate-6 transition-all">
                                     <item.icon size={36} />
                                 </div>
                                 <span className="text-5xl font-black text-[var(--foreground)] opacity-[0.03] absolute top-6 right-10 group-hover:text-primary/10 transition-colors">{item.step}</span>
@@ -207,15 +207,15 @@ const Landing = () => {
                         <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
                             <div className="absolute top-0 right-0 w-[40%] h-full bg-white/10 -skew-x-12 translate-x-1/2"></div>
                         </div>
-                        <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-none mb-10 relative z-10 uppercase">
+                        <h2 className="text-5xl md:text-7xl font-black text-[var(--primary-foreground)] tracking-tighter leading-none mb-10 relative z-10 uppercase">
                             Ready to Scale <br /> Your Supermarket?
                         </h2>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-6 relative z-10">
-                            <Link to="/login" className="px-14 py-6 bg-slate-900 text-white font-black rounded-[28px] hover:bg-slate-800 transition-all shadow-xl flex items-center gap-3 uppercase text-sm tracking-widest active:scale-95">
+                            <Link to="/login" className="px-14 py-6 bg-[var(--foreground)] text-[var(--background)] font-black rounded-[28px] hover:opacity-90 transition-all shadow-xl flex items-center gap-3 uppercase text-sm tracking-widest active:scale-95">
                                 Start Your Journey
                                 <ArrowRight size={20} />
                             </Link>
-                            <span className="text-white/60 font-medium">No credit card required. Cancel anytime.</span>
+                            <span className="text-[var(--primary-foreground)]/80 font-medium">No credit card required. Cancel anytime.</span>
                         </div>
                     </div>
                 </div>

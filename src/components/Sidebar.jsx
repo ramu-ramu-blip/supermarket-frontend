@@ -7,7 +7,8 @@ import {
     ReceiptText,
     BarChart3,
     History,
-    X
+    X,
+    Truck
 } from 'lucide-react';
 import ConfirmationModal from './ConfirmationModal';
 import { useState } from 'react';
@@ -22,6 +23,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         { name: 'Billing', icon: ReceiptText, path: '/billing' },
         { name: 'Analytics', icon: BarChart3, path: '/analytics' },
         { name: 'Transactions', icon: History, path: '/transactions' },
+        { name: 'Suppliers', icon: Truck, path: '/suppliers' }, // Assuming Truck icon is imported or I need to import it
     ];
 
     const handleLogoutConfirm = () => {
@@ -49,7 +51,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
             <aside
                 className={`
-                    fixed lg:static inset-y-0 left-0 w-64 h-screen bg-[var(--card)] border-r border-[var(--border)] 
+                    fixed lg:static inset-y-0 left-0 w-64 h-screen bg-(--card) border-r border-(--border) 
                     flex flex-col transition-all duration-300 z-50
                     ${isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:translate-x-0'}
                 `}
@@ -57,16 +59,16 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 <div className="p-8 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className="p-2 bg-primary rounded-xl shadow-md shadow-primary/20">
-                            <ShoppingBag className="text-white w-6 h-6" />
+                            <ShoppingBag className="text-(--primary-foreground) w-6 h-6" />
                         </div>
-                        <h1 className="text-xl font-black tracking-tighter text-[var(--foreground)] uppercase">
+                        <h1 className="text-xl font-black tracking-tighter text-(--foreground) uppercase">
                             Super<span className="text-primary tracking-tighter">Pro</span>
                         </h1>
                     </div>
                     {/* Mobile Close Button */}
                     <button
                         onClick={() => setIsOpen(false)}
-                        className="p-2 text-[var(--muted)] hover:text-primary lg:hidden"
+                        className="p-2 text-(--muted) hover:text-primary lg:hidden"
                     >
                         <X size={20} />
                     </button>
@@ -82,7 +84,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                                 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
                                 ${isActive
                                     ? 'sidebar-link-active'
-                                    : 'text-[var(--secondary)] hover:bg-[var(--input)] hover:text-[var(--foreground)]'}
+                                    : 'text-(--muted) hover:bg-(--input) hover:text-(--foreground)'}
                             `}
                         >
                             <div className="w-6 h-6 flex items-center justify-center transition-all duration-200 group-hover:scale-110">
@@ -93,7 +95,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                     ))}
                 </nav>
 
-                <div className="p-4 border-t border-[var(--border)]">
+                <div className="p-4 border-t border-(--border)">
                     <button
                         onClick={() => setShowLogoutModal(true)}
                         className="w-full flex items-center gap-3 px-4 py-3 text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all group"
